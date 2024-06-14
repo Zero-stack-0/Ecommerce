@@ -1,0 +1,67 @@
+@section Styles {
+    <link href="~/css/SignUp.css" rel="stylesheet" type="text/css" />
+}
+@model Service.Dto.SignUpRequest;
+@{
+    string message = ViewData["MessageForSignUp"] as string;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string formValidationMessage = string.Empty;
+}
+
+
+<h1>@message</h1>
+
+<div class="singup-container">
+    <div class="form-container">
+        <p class="form-validation">@formValidationMessage</p>
+        <h2>Sign Up</h2>
+        <form asp-action="SignUp" asp-controller="Account" method="post">
+            @Html.AntiForgeryToken()
+            <div class="input-group">
+                <label for="firstName">First Name</label>
+                <input asp-for="FirstName" type="text" id="firstName" name="FirstName" required>
+            </div>
+            <div class="input-group">
+                <label for="lastName">Last Name</label>
+                <input asp-for="LastName" type="text" id="lastName" name="LastName" required>
+            </div>
+            <div class="input-group">
+                <label for="email">Email Address</label>
+                <input asp-for="EmailId" type="email" id="email" name="EmailId" required>
+            </div>
+            <div class="input-group">
+                <label for="username">User Name</label>
+                <input asp-for="UserName" type="username" id="username" name="username" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input asp-for="PassWord" type="password" id="password" name="Password" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Confrim Password</label>
+                <input asp-for="ConfirmPassword" type="password" id="password" name="Password" required>
+            </div>
+            <div class="input-group">
+                <label for="dob">Date of Birth</label>
+                <input asp-for="DateOfBirth" type="date" id="dob" name="DateOfBirth" required>
+            </div>
+            <div class="input-group">
+                <button type="submit" onclick="checkFormvalidation()">Sign Up</button>
+            </div>
+            <div class="login-link">
+                <p>Already have an account? <a asp-controller="Account" asp-action="Login">Log In</a></p>
+            </div>
+        </form>
+    </div>
+    <div class="image-container">
+        <img src="https://www.searchenginejournal.com/wp-content/uploads/2020/03/20-free-things-you-need-to-do-after-launching-your-ecommerce-website-5e664bcb60da5.png"
+            alt="Illustration">
+    </div>
+</div>
+
+
+<script>
+    function checkFormvalidation() => {
+
+    }
+</script>

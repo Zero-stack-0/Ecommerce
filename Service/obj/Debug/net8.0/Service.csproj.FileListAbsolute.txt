@@ -1,0 +1,17 @@
+/Users/shubhamjangid/Desktop/Ecommerce/Service/bin/Debug/net8.0/Service.deps.json
+/Users/shubhamjangid/Desktop/Ecommerce/Service/bin/Debug/net8.0/Service.dll
+/Users/shubhamjangid/Desktop/Ecommerce/Service/bin/Debug/net8.0/Service.pdb
+/Users/shubhamjangid/Desktop/Ecommerce/Service/obj/Debug/net8.0/Service.GeneratedMSBuildEditorConfig.editorconfig
+/Users/shubhamjangid/Desktop/Ecommerce/Service/obj/Debug/net8.0/Service.AssemblyInfoInputs.cache
+/Users/shubhamjangid/Desktop/Ecommerce/Service/obj/Debug/net8.0/Service.AssemblyInfo.cs
+/Users/shubhamjangid/Desktop/Ecommerce/Service/obj/Debug/net8.0/Service.csproj.CoreCompileInputs.cache
+/Users/shubhamjangid/Desktop/Ecommerce/Service/obj/Debug/net8.0/Service.dll
+/Users/shubhamjangid/Desktop/Ecommerce/Service/obj/Debug/net8.0/refint/Service.dll
+/Users/shubhamjangid/Desktop/Ecommerce/Service/obj/Debug/net8.0/Service.pdb
+/Users/shubhamjangid/Desktop/Ecommerce/Service/obj/Debug/net8.0/ref/Service.dll
+/Users/shubhamjangid/Desktop/Ecommerce/Service/bin/Debug/net8.0/Data.dll
+/Users/shubhamjangid/Desktop/Ecommerce/Service/bin/Debug/net8.0/Entities.dll
+/Users/shubhamjangid/Desktop/Ecommerce/Service/bin/Debug/net8.0/Data.pdb
+/Users/shubhamjangid/Desktop/Ecommerce/Service/bin/Debug/net8.0/Entities.pdb
+/Users/shubhamjangid/Desktop/Ecommerce/Service/obj/Debug/net8.0/Service.csproj.AssemblyReference.cache
+/Users/shubhamjangid/Desktop/Ecommerce/Service/obj/Debug/net8.0/Service.csproj.Up2Date

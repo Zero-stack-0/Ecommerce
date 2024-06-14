@@ -1,0 +1,79 @@
+.singup-container {
+    display: flex;
+    width: 80%;
+    max-width: 1200px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 0 auto;
+    margin-top: 50px;
+    height: fit-content;
+}
+
+.form-container {
+    flex: 1;
+    padding: 40px;
+}
+
+.form-container h2 {
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.input-group button {
+    width: 100%;
+    padding: 15px;
+    background-color: #5a67d8;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.input-group button:hover {
+    background-color: #434190;
+}
+
+.login-link {
+    text-align: center;
+}
+
+.login-link a {
+    color: #5a67d8;
+    text-decoration: none;
+}
+
+.image-container {
+    flex: 1;
+    background-color: #eef2f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-container img {
+    width: 80%;
+    max-width: 400px;
+}
+
+.form-validation {
+    color: red;
+}

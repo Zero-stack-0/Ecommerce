@@ -1,0 +1,35 @@
+@section Styles {
+    <link href="~/css/login.css" rel="stylesheet" type="text/css" />
+}
+@{
+    string loginMessage = ViewData["LoginMessage"] as string;
+}
+@model Service.Dto.LoginRequest;
+
+<h3 style="color: red;">@loginMessage</h3>
+<div class="singup-container">
+
+    <div class="form-container">
+        <form asp-action="Login" asp-controller="Account" method="post">
+            @Html.AntiForgeryToken()
+            <div class="input-group">
+                <label for="firstName">Email/Username</label>
+                <input asp-for="EmailIdOrUserName" type="text" id="EmailIdOrUserName" name="EmailIdOrUserName" required>
+            </div>
+            <div class="input-group">
+                <label for="lastName">Password</label>
+                <input asp-for="PassWord" type="password" id="password" name="password" required>
+            </div>
+            <div class="input-group">
+                <button type="submit">Login</button>
+            </div>
+            <div class="login-link">
+                <p>Don't have an account? <a asp-controller="Account" asp-action="SignUp">Sign Up</a></p>
+            </div>
+        </form>
+    </div>
+    <div class="image-container">
+        <img src="https://www.searchenginejournal.com/wp-content/uploads/2020/03/20-free-things-you-need-to-do-after-launching-your-ecommerce-website-5e664bcb60da5.png"
+            alt="Illustration">
+    </div>
+</div>
