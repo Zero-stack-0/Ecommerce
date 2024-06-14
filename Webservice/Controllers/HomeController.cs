@@ -21,15 +21,4 @@ public class HomeController : Controller
         var requestor = await cookieUserDetailsHandler.GetUserDetail(claimsIdentity);
         return View(requestor);
     }
-
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
 }
