@@ -13,26 +13,37 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Webservice</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+        <div class="nav-container">
+            <div class="nav-logo">
+                <div class="nav-log-img">
+                    <img src="~/images/logo.jpg" />
                 </div>
+                <a asp-action="Index" asp-controller="Home">
+                    <div class="logo">
+                        E-Buy
+                    </div>
+                </a>
             </div>
-        </nav>
+            <div class="nav-middle">
+                <div class="nav-product">Moblies</div>
+                <div class="nav-product">Tabtles</div>
+                <div class="nav-product">Laptops</div>
+            </div>
+            <div class="nav-account">
+
+                <a asp-action="Login" asp-controller="Account">
+                    <div class="account-operation">
+                        Login
+                    </div>
+                </a>
+
+                <a asp-action="SignUp" asp-controller="Account">
+                    <div class="account-operation">
+                        Sign Up
+                    </div>
+                </a>
+            </div>
+        </div>
     </header>
     <div class="container">
         <main role="main" class="pb-3">

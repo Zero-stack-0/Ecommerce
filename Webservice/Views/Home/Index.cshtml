@@ -1,10 +1,28 @@
-﻿@model Service.Dto.UserResponse;
+﻿@section Styles {
+    <link href="~/css/index.css" rel="stylesheet" type="text/css" />
+}
+@model Service.Dto.UserResponse;
 @{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p>Hello @Model.FirstName</p>
+<div class="home-page-main-container">
+    <div class="first-block">
+        <div class="head-div">
+            <h2 class="h2-word">
+                You can feel <img class="fashion-image" src="~/images/fashion.jpg"><br>
+                <span class="fashion-word">fashion</span> sense.
+            </h2>
+        </div>
+        <div class="first-block-2">
+            <p>
+                E.buy is the right place for you to buy your fashion <br>
+                clothes with a reasonable price and trust.
+            </p>
+            <div class="block-2-buttons">
+                <div class="shop-now">Shop Now</div>
+                <div class="learn-more">Learn More</div>
+            </div>
+        </div>
+    </div>
 </div>
