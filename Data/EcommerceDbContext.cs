@@ -13,5 +13,6 @@ namespace Data
         //define tables
 
         public DbSet<Users> Users { get; set; }
+        public DbSet<Role> Role { get; set; }
     }
 }

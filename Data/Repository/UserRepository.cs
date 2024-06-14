@@ -14,7 +14,7 @@ namespace Data.Repository
 
         public async Task<Users?> GetByEmailId(string emailId)
         {
-            return await context.Users.FirstOrDefaultAsync(it => it.EmailId == emailId);
+            return await context.Users.Include(it => it.Role).FirstOrDefaultAsync(it => it.EmailId == emailId);
         }
 
         public async Task<Users?> GetByUserName(string userName)
@@ -24,7 +24,7 @@ namespace Data.Repository
 
         public async Task<Users?> GetByUserNameOrEmailId(string emailOrUserName)
         {
-            return await context.Users.FirstOrDefaultAsync(it => (it.EmailId == emailOrUserName || it.Username == emailOrUserName) && it.IsActive && !it.IsDeleted);
+            return await context.Users.Include(it => it.Role).FirstOrDefaultAsync(it => (it.EmailId == emailOrUserName || it.Username == emailOrUserName) && it.IsActive && !it.IsDeleted);
         }
     }
 }

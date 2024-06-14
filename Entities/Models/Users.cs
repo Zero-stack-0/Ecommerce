@@ -24,6 +24,7 @@ namespace Entities.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string EmailId { get; set; }
+        public int RoleId { get; set; }
         public bool IsEmailVerified { get; set; }
         public string HashedPassword { get; set; }
         public DateTime CreatedOn { get; set; }
@@ -36,6 +37,7 @@ namespace Entities.Models
         public string Username { get; set; }
         public bool IsActive { get; set; }
         public DateTime? AccountBlockedDueToWrongCredentialDate { get; set; }
+        public Role Role { get; set; }
 
         public void ChangeLastLoginDate()
         {
