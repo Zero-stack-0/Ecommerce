@@ -5,3 +5,6 @@
 # Ignore specific directories
 /bin/
 /obj/
+Data/bin/Debug
+Service/obj/Debug
+Webservice/bin/Debug
