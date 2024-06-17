@@ -9,6 +9,10 @@
       "PackagePath": "staticwebassets/css/SignUp.css"
     },
     {
+      "Id": "/Users/shubhamjangid/Desktop/Ecommerce/Webservice/wwwroot/css/index.css",
+      "PackagePath": "staticwebassets/css/index.css"
+    },
+    {
       "Id": "/Users/shubhamjangid/Desktop/Ecommerce/Webservice/wwwroot/css/login.css",
       "PackagePath": "staticwebassets/css/login.css"
     },
@@ -19,6 +23,26 @@
     {
       "Id": "/Users/shubhamjangid/Desktop/Ecommerce/Webservice/wwwroot/favicon.ico",
       "PackagePath": "staticwebassets/favicon.ico"
+    },
+    {
+      "Id": "/Users/shubhamjangid/Desktop/Ecommerce/Webservice/wwwroot/images/cart.png",
+      "PackagePath": "staticwebassets/images/cart.png"
+    },
+    {
+      "Id": "/Users/shubhamjangid/Desktop/Ecommerce/Webservice/wwwroot/images/fashion.jpg",
+      "PackagePath": "staticwebassets/images/fashion.jpg"
+    },
+    {
+      "Id": "/Users/shubhamjangid/Desktop/Ecommerce/Webservice/wwwroot/images/logo.jpg",
+      "PackagePath": "staticwebassets/images/logo.jpg"
+    },
+    {
+      "Id": "/Users/shubhamjangid/Desktop/Ecommerce/Webservice/wwwroot/images/logout.png",
+      "PackagePath": "staticwebassets/images/logout.png"
+    },
+    {
+      "Id": "/Users/shubhamjangid/Desktop/Ecommerce/Webservice/wwwroot/images/profile.png",
+      "PackagePath": "staticwebassets/images/profile.png"
     },
     {
       "Id": "/Users/shubhamjangid/Desktop/Ecommerce/Webservice/wwwroot/js/site.js",

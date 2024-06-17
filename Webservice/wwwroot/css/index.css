@@ -1,0 +1,75 @@
+.first-block {
+    margin-top: 50px;
+    margin-left: 80px;
+    margin-right: 80px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.fashion-image {
+    height: 90px;
+    width: 90px;
+    border-radius: 50%;
+}
+
+.block-2-buttons {
+    display: flex;
+    margin-top: 35px;
+}
+
+.fashion-word {
+    color: rgb(233, 157, 16);
+}
+
+.h2-word {
+    font-weight: bold;
+    font-size: 74px;
+}
+
+.first-block-2 {
+    margin-top: 20px;
+}
+
+.shop-now {
+    display: flex;
+    margin-right: 40px;
+    height: 60px;
+    width: 160px;
+    background-color: rgb(53, 133, 244);
+    ;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    border-radius: 40px;
+}
+
+.learn-more {
+    display: flex;
+    height: 60px;
+    width: 160px;
+    color: black;
+    align-items: center;
+    justify-content: center;
+    border-radius: 40px;
+    border-style: solid;
+    border-color: black;
+    border-width: thin;
+}
+
+.first-block-2 p {
+    color: grey;
+}
+
+.shop-now:hover {
+    color: black;
+    border-radius: 40px;
+    border-style: solid;
+    border-color: black;
+    border-width: thin;
+    background-color: white;
+}
+
+.learn-more:hover {
+    background-color: rgb(53, 133, 244);
+    color: white;
+}

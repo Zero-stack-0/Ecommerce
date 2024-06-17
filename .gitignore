@@ -1,0 +1,7 @@
+# Ignore all debug files
+*.debug
+*.log
+
+# Ignore specific directories
+/bin/
+/obj/

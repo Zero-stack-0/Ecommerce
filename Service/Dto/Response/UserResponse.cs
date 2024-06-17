@@ -1,3 +1,5 @@
+using Service.Dto.Response;
+
 namespace Service.Dto
 {
     public class UserResponse
@@ -14,5 +16,6 @@ namespace Service.Dto
         public DateTime DateOfBirth { get; set; }
         public string Username { get; set; }
         public bool IsActive { get; set; }
+        public RoleResponse Role { get; set; }
     }
 }

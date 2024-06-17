@@ -24,6 +24,19 @@ DependencyInjection.InjectDependencies(builder.Services);
 
 var app = builder.Build();
 
+app.Use(async (context, next) =>
+    {
+        if (context.User.Identity.IsAuthenticated &&
+            (context.Request.Path.StartsWithSegments("/Account/Login") ||
+             context.Request.Path.StartsWithSegments("/Account/SignUp")))
+        {
+            context.Response.Redirect("/Home/Index");
+            return;
+        }
+
+        await next.Invoke();
+    });
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
