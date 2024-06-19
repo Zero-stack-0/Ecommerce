@@ -1,7 +1,6 @@
 using AutoMapper;
 using Data.Repository.Interface;
 using Entities.Models;
-using Microsoft.AspNetCore.Builder.Extensions;
 using Microsoft.AspNetCore.Http;
 using Service.Dto;
 using Service.Helper;
@@ -41,7 +40,7 @@ namespace Service
                     return new ApiResponse(null, StatusCodes.Status400BadRequest, Account.INVALID_DATE_OF_BIRTH);
                 }
 
-                var user = new Users(dto.FirstName, dto.LastName, dto.EmailId, HashPassword(dto.PassWord), dto.DateOfBirth, dto.UserName);
+                var user = new Users(dto.FirstName, dto.LastName, dto.EmailId, HashPassword(dto.PassWord), dto.DateOfBirth, dto.UserName, dto.CountryId, dto.StateId, dto.CityId);
 
                 userRepository.Add(user);
 
@@ -100,6 +99,11 @@ namespace Service
             }
 
             return mapper.Map<UserResponse>(user);
+        }
+
+        public async Task<Country?> GetCountry(long id)
+        {
+            return await userRepository.GetCountry(id);
         }
 
         private bool IsDateOfBirthValid(DateTime dateOfBrith)

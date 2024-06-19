@@ -9,5 +9,8 @@ namespace Service.Dto
         public DateTime DateOfBirth { get; set; }
         public string PassWord { get; set; }
         public string ConfirmPassword { get; set; }
+        public long CountryId { get; set; }
+        public long StateId { get; set; }
+        public long CityId { get; set; }
     }
 }

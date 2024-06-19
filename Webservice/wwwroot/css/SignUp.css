@@ -77,3 +77,7 @@
 .form-validation {
     color: red;
 }
+
+.location {
+    margin-right: 5px !important;
+}

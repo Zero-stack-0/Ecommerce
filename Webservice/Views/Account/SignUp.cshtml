@@ -19,7 +19,7 @@
             @Html.AntiForgeryToken()
             <div class="input-group">
                 <label for="firstName">First Name</label>
-                <input asp-for="FirstName" type="text" id="firstName" name="FirstName" required>
+                <input asp-for="FirstName" type="text" id="firstName" name="FirstName">
             </div>
             <div class="input-group">
                 <label for="lastName">Last Name</label>
@@ -46,7 +46,26 @@
                 <input asp-for="DateOfBirth" type="date" id="dob" name="DateOfBirth" required>
             </div>
             <div class="input-group">
-                <button type="submit" onclick="checkFormvalidation()">Sign Up</button>
+                <label for="country">Country</label>
+                <select id="country" name="CountryId" asp-for="CountryId" onchange="loadStates()">
+                    <option value="">Select Country</option>
+                    <option asp-for="CountryId" value="1">India</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="state">State</label>
+                <select id="state" name="StateId" asp-for="StateId" onchange="loadCities()">
+                    <option asp-for="StateId" value="">Select State</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="city">City</label>
+                <select id="city" name="CityId" asp-for="CityId" onchange="assignValueToDto()">
+                    <option asp-for="CityId" value="">Select City</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <button type="submit">Sign Up</button>
             </div>
             <div class="login-link">
                 <p>Already have an account? <a asp-controller="Account" asp-action="Login">Log In</a></p>
@@ -59,9 +78,47 @@
     </div>
 </div>
 
-
 <script>
-    function checkFormvalidation() => {
+    function loadStates() {
+        var countryId = document.getElementById("country").value;
+        var stateDropdown = document.getElementById("state");
+        stateDropdown.innerHTML = '<option value="">Select State</option>';
+        var cityDropdown = document.getElementById("city");
+        cityDropdown.innerHTML = '<option value="">Select City</option>';
 
+        if (countryId) {
+            fetch(`/Account/GetStates?countryId=${countryId}`)
+                .then(response => response.json())
+                .then(states => {
+                    states.forEach(state => {
+                        var option = document.createElement("option");
+                        option.value = state.id;
+                        option.text = state.name;
+                        stateDropdown.add(option);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    }
+
+    function loadCities() {
+        var countryId = document.getElementById("country").value;
+        var stateId = document.getElementById("state").value;
+        var cityDropdown = document.getElementById("city");
+        cityDropdown.innerHTML = '<option value="">Select City</option>';
+
+        if (stateId) {
+            fetch(`/Account/GetCities?countryId=${countryId}&stateId=${stateId}`)
+                .then(response => response.json())
+                .then(cities => {
+                    cities.forEach(city => {
+                        var option = document.createElement("option");
+                        option.value = city.id;
+                        option.text = city.name;
+                        cityDropdown.add(option);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
     }
 </script>
