@@ -1,8 +1,10 @@
+using System.Net.Sockets;
 using System.Security.Claims;
 using Entities;
 using Entities.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Dto;
 using Service.Interface;
@@ -52,8 +54,10 @@ namespace Webservice.Controllers
             return View();
         }
 
-        public IActionResult SignUp()
+        public async Task<IActionResult> SignUp()
         {
+            var country = await GetStatesAndCity(1);
+            ViewData["Country"] = country;
             return View();
         }
 
@@ -77,6 +81,7 @@ namespace Webservice.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [Authorize]
         public async Task<IActionResult> Profile()
         {
             var user = await cookieUserDetailsHandler.GetUserDetail(this.User.Identity as ClaimsIdentity);
@@ -85,6 +90,27 @@ namespace Webservice.Controllers
                 return RedirectToAction("Login");
             }
             return View(user);
+        }
+
+        [HttpGet]
+        public async Task<Country?> GetStatesAndCity(long id)
+        {
+            return await accountService.GetCountry(id);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetStates(long countryId)
+        {
+            var country = await accountService.GetCountry(countryId);
+            return Json(country.State);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetCities(long stateId, long countryId)
+        {
+            var country = await accountService.GetCountry(countryId);
+            var cities = country.State.FirstOrDefault(s => s.Id == stateId).City;
+            return Json(cities);
         }
     }
 }

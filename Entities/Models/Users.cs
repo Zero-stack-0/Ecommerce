@@ -5,7 +5,7 @@ namespace Entities.Models
         public Users()
         { }
 
-        public Users(string firstName, string lastName, string emailId, string passWord, DateTime dateOfBirth, string userName)
+        public Users(string firstName, string lastName, string emailId, string passWord, DateTime dateOfBirth, string userName, long countryId, long stateId, long cityId)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -18,13 +18,16 @@ namespace Entities.Models
             IsDeleted = false;
             LastLoginDate = DateTime.UtcNow;
             IsActive = true;
+            CountryId = countryId;
+            StateId = stateId;
+            CityId = cityId;
         }
 
         public long Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string EmailId { get; set; }
-        public int RoleId { get; set; }
+        public int RoleId { get; set; } = 2;
         public bool IsEmailVerified { get; set; }
         public string HashedPassword { get; set; }
         public DateTime CreatedOn { get; set; }
@@ -38,6 +41,9 @@ namespace Entities.Models
         public bool IsActive { get; set; }
         public DateTime? AccountBlockedDueToWrongCredentialDate { get; set; }
         public Role Role { get; set; }
+        public long CountryId { get; set; }
+        public long StateId { get; set; }
+        public long CityId { get; set; }
 
         public void ChangeLastLoginDate()
         {

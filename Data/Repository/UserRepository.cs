@@ -26,5 +26,13 @@ namespace Data.Repository
         {
             return await context.Users.Include(it => it.Role).FirstOrDefaultAsync(it => (it.EmailId == emailOrUserName || it.Username == emailOrUserName) && it.IsActive && !it.IsDeleted);
         }
+
+        public async Task<Country?> GetCountry(long id)
+        {
+            return await context.Country
+            .Include(s => s.State)
+                .ThenInclude(c => c.City)
+            .FirstOrDefaultAsync(it => it.Id == id);
+        }
     }
 }

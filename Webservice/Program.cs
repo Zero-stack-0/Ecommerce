@@ -2,6 +2,7 @@ using Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Webservice.DependencyInjection;
+using Webservice.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,18 +25,18 @@ DependencyInjection.InjectDependencies(builder.Services);
 
 var app = builder.Build();
 
-app.Use(async (context, next) =>
-    {
-        if (context.User.Identity.IsAuthenticated &&
-            (context.Request.Path.StartsWithSegments("/Account/Login") ||
-             context.Request.Path.StartsWithSegments("/Account/SignUp")))
-        {
-            context.Response.Redirect("/Home/Index");
-            return;
-        }
+// app.Use(async (context, next) =>
+//     {
+//         if (context.User.Identity.IsAuthenticated &&
+//             (context.Request.Path.StartsWithSegments("/Account/Login") ||
+//              context.Request.Path.StartsWithSegments("/Account/SignUp")))
+//         {
+//             context.Response.Redirect("/Home/Index");
+//             return;
+//         }
 
-        await next.Invoke();
-    });
+//         await next.Invoke();
+//     });
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -50,8 +51,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
