@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+
 namespace Service.Dto
 {
     public class SignUpRequest
@@ -12,5 +14,7 @@ namespace Service.Dto
         public long CountryId { get; set; }
         public long StateId { get; set; }
         public long CityId { get; set; }
+        public IFormFile ProfilePic { get; set; }
+        public string ProfilePicUrl { get; set; }
     }
 }

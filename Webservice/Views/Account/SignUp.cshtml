@@ -5,17 +5,12 @@
 @{
     string message = ViewData["MessageForSignUp"] as string;
     Layout = "~/Views/Shared/_Layout.cshtml";
-    string formValidationMessage = string.Empty;
 }
-
-
-<h1>@message</h1>
 
 <div class="singup-container">
     <div class="form-container">
-        <p class="form-validation">@formValidationMessage</p>
         <h2>Sign Up</h2>
-        <form asp-action="SignUp" asp-controller="Account" method="post">
+        <form asp-action="SignUp" asp-controller="Account" method="post" enctype="multipart/form-data">
             @Html.AntiForgeryToken()
             <div class="input-group">
                 <label for="firstName">First Name</label>
@@ -46,20 +41,24 @@
                 <input asp-for="DateOfBirth" type="date" id="dob" name="DateOfBirth" required>
             </div>
             <div class="input-group">
-                <label for="country">Country</label>
+                <label for="ProfilePic">Profile</label>
+                <input asp-for="ProfilePic" type="file" id="ProfilePic" name="ProfilePic">
+            </div>
+            <div class="input-group">
+                <label for="country" style="margin-right: 25px;">Country</label>
                 <select id="country" name="CountryId" asp-for="CountryId" onchange="loadStates()">
                     <option value="">Select Country</option>
                     <option asp-for="CountryId" value="1">India</option>
                 </select>
             </div>
             <div class="input-group">
-                <label for="state">State</label>
+                <label for="state" style="margin-right: 25px;">State</label>
                 <select id="state" name="StateId" asp-for="StateId" onchange="loadCities()">
                     <option asp-for="StateId" value="">Select State</option>
                 </select>
             </div>
             <div class="input-group">
-                <label for="city">City</label>
+                <label for="city" style="margin-right: 25px;">City</label>
                 <select id="city" name="CityId" asp-for="CityId" onchange="assignValueToDto()">
                     <option asp-for="CityId" value="">Select City</option>
                 </select>

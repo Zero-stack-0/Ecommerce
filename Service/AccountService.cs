@@ -40,7 +40,7 @@ namespace Service
                     return new ApiResponse(null, StatusCodes.Status400BadRequest, Account.INVALID_DATE_OF_BIRTH);
                 }
 
-                var user = new Users(dto.FirstName, dto.LastName, dto.EmailId, HashPassword(dto.PassWord), dto.DateOfBirth, dto.UserName, dto.CountryId, dto.StateId, dto.CityId);
+                var user = new Users(dto.FirstName, dto.LastName, dto.EmailId, HashPassword(dto.PassWord), dto.DateOfBirth, dto.UserName, dto.CountryId, dto.StateId, dto.CityId, dto.ProfilePicUrl);
 
                 userRepository.Add(user);
 

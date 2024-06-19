@@ -1,4 +1,3 @@
-using System.Net.Sockets;
 using System.Security.Claims;
 using Entities;
 using Entities.Models;
@@ -16,11 +15,13 @@ namespace Webservice.Controllers
     {
         private readonly IAccountService accountService;
         private readonly CookieUserDetailsHandler cookieUserDetailsHandler;
+        private readonly IWebHostEnvironment environment;
 
-        public AccountController(IAccountService accountService, CookieUserDetailsHandler cookieUserDetailsHandler)
+        public AccountController(IAccountService accountService, CookieUserDetailsHandler cookieUserDetailsHandler, IWebHostEnvironment environment)
         {
             this.accountService = accountService;
             this.cookieUserDetailsHandler = cookieUserDetailsHandler;
+            this.environment = environment;
         }
 
         public IActionResult Login()
@@ -29,7 +30,7 @@ namespace Webservice.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(Service.Dto.LoginRequest dto)
+        public async Task<IActionResult> Login(LoginRequest dto)
         {
             var data = await accountService.GetUserByLoginCredential(dto);
             ViewData[Constants.VIEW_DATA.LOGIN_MESSAGE] = data.Message;
@@ -40,7 +41,8 @@ namespace Webservice.Controllers
                 {
                     new Claim(ClaimTypes.Name, user.FirstName + "" + user.LastName),
                     new Claim(ClaimTypes.Email , user.EmailId),
-                    new Claim(ClaimTypes.Role, user.Role.Id.ToString())
+                    new Claim(ClaimTypes.Role, user.Role.Id.ToString()),
+                    new Claim(ClaimTypes.UserData, user.ProfilePicUrl)
                 };
 
                 var Identity = new ClaimsIdentity(Claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -54,21 +56,28 @@ namespace Webservice.Controllers
             return View();
         }
 
-        public async Task<IActionResult> SignUp()
+        public IActionResult SignUp()
         {
-            var country = await GetStatesAndCity(1);
-            ViewData["Country"] = country;
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpRequest dto)
         {
-            var response = await accountService.Create(dto);
+            dto.ProfilePicUrl = Path.Combine("uploads", dto.ProfilePic.FileName); ;
 
+            var response = await accountService.Create(dto);
             ViewData["MessageForSignUp"] = response.Message;
             if (response.StatusCodes == StatusCodes.Status200OK)
             {
+                if (dto.ProfilePic is not null)
+                {
+                    var path = Path.Combine(environment.WebRootPath, "uploads", dto.ProfilePic.FileName);
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await dto.ProfilePic.CopyToAsync(stream);
+                    }
+                }
                 return RedirectToAction("Index", "Home");
             }
 
@@ -92,25 +101,28 @@ namespace Webservice.Controllers
             return View(user);
         }
 
-        [HttpGet]
-        public async Task<Country?> GetStatesAndCity(long id)
-        {
-            return await accountService.GetCountry(id);
-        }
 
         [HttpGet]
         public async Task<JsonResult> GetStates(long countryId)
         {
             var country = await accountService.GetCountry(countryId);
-            return Json(country.State);
+            if (country is not null)
+            {
+                return Json(country.State);
+            }
+            return Json(null);
         }
 
         [HttpGet]
         public async Task<JsonResult> GetCities(long stateId, long countryId)
         {
             var country = await accountService.GetCountry(countryId);
-            var cities = country.State.FirstOrDefault(s => s.Id == stateId).City;
-            return Json(cities);
+            if (country is not null)
+            {
+                var cities = country.State.FirstOrDefault(s => s.Id == stateId).City;
+                return Json(cities);
+            }
+            return Json(null);
         }
     }
 }

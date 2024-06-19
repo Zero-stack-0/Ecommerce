@@ -1,3 +1,4 @@
+using Entities.Models;
 using Service.Dto.Response;
 
 namespace Service.Dto
@@ -17,5 +18,9 @@ namespace Service.Dto
         public string Username { get; set; }
         public bool IsActive { get; set; }
         public RoleResponse Role { get; set; }
+        public Country Country { get; set; }
+        public State State { get; set; }
+        public City City { get; set; }
+        public string ProfilePicUrl { get; set; }
     }
 }

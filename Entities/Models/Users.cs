@@ -5,7 +5,7 @@ namespace Entities.Models
         public Users()
         { }
 
-        public Users(string firstName, string lastName, string emailId, string passWord, DateTime dateOfBirth, string userName, long countryId, long stateId, long cityId)
+        public Users(string firstName, string lastName, string emailId, string passWord, DateTime dateOfBirth, string userName, long countryId, long stateId, long cityId, string profilePicUrl)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -21,6 +21,7 @@ namespace Entities.Models
             CountryId = countryId;
             StateId = stateId;
             CityId = cityId;
+            ProfilePicUrl = profilePicUrl;
         }
 
         public long Id { get; set; }
@@ -44,6 +45,10 @@ namespace Entities.Models
         public long CountryId { get; set; }
         public long StateId { get; set; }
         public long CityId { get; set; }
+        public Country Country { get; set; }
+        public State State { get; set; }
+        public City City { get; set; }
+        public string ProfilePicUrl { get; set; }
 
         public void ChangeLastLoginDate()
         {
