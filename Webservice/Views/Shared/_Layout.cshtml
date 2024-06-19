@@ -18,6 +18,8 @@
         @{
             var claimsIdentity = User.Identity as ClaimsIdentity;
             string roleId = claimsIdentity?.Claims.FirstOrDefault(e => e.Type.Contains("role"))?.Value ?? string.Empty;
+            string profilePicUrl = claimsIdentity?.Claims.FirstOrDefault(e => e.Type.Contains("userdata"))?.Value ??
+            "images/profile.png";
         }
         <div class="nav-container">
             <div class="nav-logo">
@@ -66,7 +68,7 @@
                             </a>
                             <a asp-action="Profile" asp-controller="Account">
                                 <div class="account-operation">
-                                    <img title="profile" src="~/images/profile.png">
+                                    <img class="profile" title="profile" src="~/@profilePicUrl">
                                 </div>
                             </a>
                             break;

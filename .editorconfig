@@ -8,3 +8,6 @@ dotnet_diagnostic.CS4014.severity = warning
 
 # IDE0320: Make anonymous function static
 dotnet_diagnostic.IDE0320.severity = silent
+
+# CS8602: Dereference of a possibly null reference.
+dotnet_diagnostic.CS8602.severity = warning

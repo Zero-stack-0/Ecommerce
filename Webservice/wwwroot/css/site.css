@@ -57,8 +57,14 @@ a {
 }
 
 .account-operation img {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
+}
+
+.account-operation .profile {
+  width: 35px !important;
+  height: 35px !important;
+  border-radius: 50%;
 }
 
 @media (min-width: 768px) {
