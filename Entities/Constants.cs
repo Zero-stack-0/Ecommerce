@@ -5,6 +5,7 @@ namespace Entities
         public static class Keys
         {
             public const string SUCESS = "Sucess";
+            public const string ADMIN = "Super Admin";
         }
         public static class Account
         {

@@ -64,7 +64,10 @@ namespace Webservice.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpRequest dto)
         {
-            dto.ProfilePicUrl = Path.Combine("uploads", dto.ProfilePic.FileName); ;
+            if (dto.ProfilePic is not null)
+            {
+                dto.ProfilePicUrl = Path.Combine("uploads", dto.ProfilePic.FileName);
+            }
 
             var response = await accountService.Create(dto);
             ViewData["MessageForSignUp"] = response.Message;
@@ -117,7 +120,7 @@ namespace Webservice.Controllers
         public async Task<JsonResult> GetCities(long stateId, long countryId)
         {
             var country = await accountService.GetCountry(countryId);
-            if (country is not null)
+            if (country is not null && country.State.Any())
             {
                 var cities = country.State.FirstOrDefault(s => s.Id == stateId).City;
                 return Json(cities);

@@ -1,0 +1,48 @@
+@model JsonResult;
+<label for="lastName">Search</label>
+<input type="text" id="text" name="text" oninput="loadUsersAfterSearch()">
+<button onclick="loadUsersAfterSearch()">Search</button>
+
+<div id="container">
+    <div id="user-div">
+
+    </div>
+</div>
+
+<script>
+    function loadUsersAfterSearch() {
+        var searchText = document.getElementById("text").value;
+        const container = document.getElementById("user-div");
+
+        fetch(`/Admin/GetUsers?pageNo=1&pageSize=10&searchTerm=${searchText}`)
+            .then(response => response.json())
+            .then(json => {
+                container.innerHTML = '';
+                json.value.result.forEach(user => {
+                    var user_div = document.createElement('div');
+                    user_div.className = "user-class"
+
+                    var firstName = document.createElement('p');
+                    var lastName = document.createElement('p')
+
+                    firstName.textContent = user.firstName + " " + user.lastName;
+                    lastName.textContent = user.emailId;
+
+                    container.appendChild(user_div);
+                    user_div.appendChild(firstName);
+                    user_div.appendChild(lastName);
+                });
+            })
+            .catch(error => console.error('Error fetching users:', error));  // Add error handling
+
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        loadUsersAfterSearch();
+    });
+</script>
+<style>
+    .user-class {
+        color: purple;
+    }
+</style>
