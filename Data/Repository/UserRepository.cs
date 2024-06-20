@@ -41,5 +41,29 @@ namespace Data.Repository
                 .ThenInclude(c => c.City)
             .FirstOrDefaultAsync(it => it.Id == id);
         }
+
+        public async Task<(ICollection<Users>, int totalCount)> UsersList(int pageNo, int pageSize, string searchTerm, long requestorId)
+        {
+            IQueryable<Users> query = context.Users
+                .Include(it => it.Country)
+                .Include(it => it.State)
+                .Include(it => it.City)
+                .Where(it => it.Id != requestorId);
+
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                query = query.Where(it => (it.FirstName + "" + it.LastName).Contains(searchTerm));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var users = await query.Skip((pageNo - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+            return (users, totalCount);
+        }
+
     }
 }
