@@ -17,14 +17,16 @@ namespace Service.Helper
 
     public class PagedData
     {
-        public PagedData(int pageNo, int pageSize, int totalCount)
+        public PagedData(int pageNo, int pageSize, int totalCount, int totalPages)
         {
             PageNo = pageNo;
             PageSize = pageSize;
             TotalCount = totalCount;
+            TotalPages = totalPages;
         }
         public int PageNo { get; set; }
         public int PageSize { get; set; }
         public int TotalCount { get; set; }
+        public int TotalPages { get; set; }
     }
 }

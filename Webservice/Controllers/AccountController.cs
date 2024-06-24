@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Dto;
+using Service.Helper;
 using Service.Interface;
 using Webservice.Helper;
 
@@ -37,21 +38,9 @@ namespace Webservice.Controllers
             if (data.Result is not null)
             {
                 var user = (Users)data.Result;
-                var Claims = new[]
-                {
-                    new Claim(ClaimTypes.Name, user.FirstName + "" + user.LastName),
-                    new Claim(ClaimTypes.Email , user.EmailId),
-                    new Claim(ClaimTypes.Role, user.Role.Id.ToString()),
-                    new Claim(ClaimTypes.UserData, user.ProfilePicUrl)
-                };
+                await CreateClaimsAndSigIn(user);
 
-                var Identity = new ClaimsIdentity(Claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(Identity));
-
-                return RedirectToAction("Index", "Home", user);
+                return RedirectToAction("Index", "Home");
             }
             return View();
         }
@@ -71,7 +60,7 @@ namespace Webservice.Controllers
 
             var response = await accountService.Create(dto);
             ViewData["MessageForSignUp"] = response.Message;
-            if (response.StatusCodes == StatusCodes.Status200OK)
+            if (response.StatusCodes == StatusCodes.Status200OK && response.Result is not null)
             {
                 if (dto.ProfilePic is not null)
                 {
@@ -81,6 +70,8 @@ namespace Webservice.Controllers
                         await dto.ProfilePic.CopyToAsync(stream);
                     }
                 }
+
+                await CreateClaimsAndSigIn((Users)response.Result);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -126,6 +117,23 @@ namespace Webservice.Controllers
                 return Json(cities);
             }
             return Json(null);
+        }
+
+        private async Task CreateClaimsAndSigIn(Users user)
+        {
+            var Claims = new[]
+            {
+                new Claim(ClaimTypes.Name, user.FirstName + "" + user.LastName),
+                new Claim(ClaimTypes.Email , user.EmailId),
+                new Claim(ClaimTypes.Role, user.RoleId.ToString()),
+                new Claim(ClaimTypes.UserData, string.IsNullOrEmpty(user.ProfilePicUrl) ? "" : user.ProfilePicUrl)
+            };
+
+            var Identity = new ClaimsIdentity(Claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            new ClaimsPrincipal(Identity));
         }
     }
 }
