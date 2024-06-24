@@ -1,37 +1,105 @@
-@model JsonResult;
-<label for="lastName">Search</label>
-<input type="text" id="text" name="text" oninput="loadUsersAfterSearch()">
-<button onclick="loadUsersAfterSearch()">Search</button>
+<div id="message">
+
+</div>
+
+<label for="search">Search</label>
+<input type="text" id="text" name="text" oninput="loadUsersAfterSearch(1)">
+<button onclick="loadUsersAfterSearch(1)">Search</button>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Profile</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Email</th>
+            <th scope="col">Username</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody id="user_row">
+
+    </tbody>
+</table>
+
 
 <div id="container">
-    <div id="user-div">
+    <div id="pagination">
 
     </div>
 </div>
 
 <script>
-    function loadUsersAfterSearch() {
-        var searchText = document.getElementById("text").value;
-        const container = document.getElementById("user-div");
+    function loadUsersAfterSearch(pageNo) {
 
-        fetch(`/Admin/GetUsers?pageNo=1&pageSize=10&searchTerm=${searchText}`)
+        var searchText = document.getElementById("text").value;
+        const message_div = document.getElementById("message");
+        const user_row_div = document.getElementById("user_row");
+
+        fetch(`/Admin/GetUsers?pageNo=${pageNo}&pageSize=10&searchTerm=${searchText}`)
             .then(response => response.json())
             .then(json => {
-                container.innerHTML = '';
-                json.value.result.forEach(user => {
-                    var user_div = document.createElement('div');
-                    user_div.className = "user-class"
+                user_row_div.innerHTML = '';
 
-                    var firstName = document.createElement('p');
-                    var lastName = document.createElement('p')
+                if (json.value.result.length > 0) {
+                    message_div.innerHTML = '';
+                    json.value.result.forEach(user => {
+                        var pagination = document.getElementById("pagination");
+                        var user_div = document.createElement('div');
+                        user_div.className = "user-class"
 
-                    firstName.textContent = user.firstName + " " + user.lastName;
-                    lastName.textContent = user.emailId;
+                        var tr_for_user_row = document.createElement('tr');
 
-                    container.appendChild(user_div);
-                    user_div.appendChild(firstName);
-                    user_div.appendChild(lastName);
-                });
+                        var profile_pic = document.createElement('td');
+                        var firstName = document.createElement('td');
+                        var lastName = document.createElement('td');
+                        var emailId = document.createElement('td');
+                        var userName = document.createElement('td');
+                        var view_detail = document.createElement('td');
+                        var view_detail_link = document.createElement('a');
+                        var profile_pic_img = document.createElement('img');
+
+                        profile_pic_img.setAttribute("src", "~/" + user.profilePicUrl)
+
+                        view_detail_link.href = `/Account/UserProfile?emailId=${user.emailId}`;
+
+                        profile_pic.appendChild(profile_pic_img);
+
+                        firstName.textContent = user.firstName;
+                        lastName.textContent = user.lastName;
+                        emailId.textContent = user.emailId;
+                        userName.textContent = user.username;
+
+                        view_detail_link.textContent = "View Detail";
+                        view_detail_link.style.color = "blue";
+
+                        view_detail.appendChild(view_detail_link);
+                        user_row_div.appendChild(tr_for_user_row);
+
+                        tr_for_user_row.appendChild(profile_pic);
+                        tr_for_user_row.appendChild(firstName);
+                        tr_for_user_row.appendChild(lastName);
+                        tr_for_user_row.appendChild(emailId);
+                        tr_for_user_row.appendChild(userName);
+                        tr_for_user_row.appendChild(view_detail);
+                    });
+                }
+                else {
+                    message_div.innerHTML = '';
+                    var p = document.createElement('p');
+                    p.textContent = "no user found";
+                    message_div.appendChild(p);
+                }
+
+                pagination.innerHTML = '';
+                for (let i = 1; i <= json.value.pagedData.totalPages; i++) {
+                    var a = document.createElement('button');
+                    a.textContent = i;
+                    a.addEventListener('click', function () {
+                        loadUsersAfterSearch(i);
+                    });
+                    pagination.appendChild(a);
+                }
+
             })
             .catch(error => console.error('Error fetching users:', error));  // Add error handling
 
@@ -41,8 +109,3 @@
         loadUsersAfterSearch();
     });
 </script>
-<style>
-    .user-class {
-        color: purple;
-    }
-</style>

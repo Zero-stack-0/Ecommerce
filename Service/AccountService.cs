@@ -128,7 +128,7 @@ namespace Service
 
                 var (users, totalCount) = await userRepository.UsersList(dto.PageNo, dto.PageSize, dto.SearchTerm, dto.Requestor.Id);
 
-                return new ApiResponse(users.Select(it => mapper.Map<UserResponse>(it)).ToList(), StatusCodes.Status200OK, "Users", new PagedData(dto.PageNo, dto.PageSize, totalCount));
+                return new ApiResponse(users.Select(it => mapper.Map<UserResponse>(it)).ToList(), StatusCodes.Status200OK, "Users", new PagedData(dto.PageNo, dto.PageSize, totalCount, (int)Math.Ceiling((double)totalCount / dto.PageSize)));
             }
             catch (Exception ex)
             {
