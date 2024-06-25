@@ -6,6 +6,11 @@ namespace Entities
         {
             public const string SUCESS = "Sucess";
             public const string ADMIN = "Super Admin";
+            public const string REQUESTOR_DOES_NOT_EXISTS = "Requestor does not exists";
+            public const string FORBIDDEN = "Forbidden";
+            public const string INVALID_PAGINATION = "Invalid pagination";
+            public const string USERS = "Users";
+            public const string USER_DOES_NOT_EXISTS = "Users does not exists";
         }
         public static class Account
         {

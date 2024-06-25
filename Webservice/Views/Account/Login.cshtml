@@ -1,12 +1,23 @@
 @section Styles {
     <link href="~/css/login.css" rel="stylesheet" type="text/css" />
 }
+
 @{
     string loginMessage = ViewData["LoginMessage"] as string;
+    string toastClass = "success";
+    if (!string.IsNullOrWhiteSpace(loginMessage))
+    {
+        toastClass = loginMessage.Contains("Invalid") ? "error" : "success";
+    }
 }
 @model Service.Dto.LoginRequest;
 
-<h3 style="color: red;">@loginMessage</h3>
+@if (!string.IsNullOrEmpty(loginMessage))
+{
+    <div id="toast" class="show @toastClass">
+    @loginMessage
+</div>
+}
 <div class="singup-container">
 
     <div class="form-container">
@@ -33,3 +44,37 @@
             alt="Illustration">
     </div>
 </div>
+
+<style>
+    #toast {
+        position: fixed;
+        top: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #eae4e4;
+        padding: 10px 40px;
+        border-radius: 5px;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    #toast.error {
+        background-color: red;
+    }
+
+    #toast.success {
+        background-color: green;
+    }
+
+    #toast.show {
+        opacity: 1;
+    }
+</style>
+
+<script>
+    setTimeout(function () {
+        var toast = document.getElementById("toast");
+        toast.classList.remove("show");
+    }, 1500);
+</script>

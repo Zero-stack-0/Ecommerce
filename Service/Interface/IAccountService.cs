@@ -12,5 +12,6 @@ namespace Service.Interface
         Task<UserResponse?> GetUserProfile(string emailId);
         Task<Country?> GetCountry(long id);
         Task<ApiResponse> GetUserList(GetUserListRequest dto);
+        Task<ApiResponse> GetUserProfile(UserResponse? requestor, string emailId);
     }
 }

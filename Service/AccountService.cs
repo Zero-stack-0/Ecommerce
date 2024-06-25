@@ -4,6 +4,7 @@ using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Service.Dto;
 using Service.Dto.Request.Admin;
+using Service.Dto.Response;
 using Service.Helper;
 using Service.Interface;
 using static Entities.Constants;
@@ -113,27 +114,48 @@ namespace Service
             {
                 if (dto.Requestor is null)
                 {
-                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.ADMIN, null);
+                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.REQUESTOR_DOES_NOT_EXISTS, null);
                 }
 
                 if (dto.Requestor.Role.Name != Keys.ADMIN)
                 {
-                    return new ApiResponse(null, StatusCodes.Status403Forbidden, Keys.ADMIN, null);
+                    return new ApiResponse(null, StatusCodes.Status403Forbidden, Keys.FORBIDDEN, null);
                 }
 
                 if (dto.PageNo <= 0 || dto.PageSize <= 0)
                 {
-                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.ADMIN, null);
+                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.INVALID_PAGINATION, null);
                 }
 
                 var (users, totalCount) = await userRepository.UsersList(dto.PageNo, dto.PageSize, dto.SearchTerm, dto.Requestor.Id);
 
-                return new ApiResponse(users.Select(it => mapper.Map<UserResponse>(it)).ToList(), StatusCodes.Status200OK, "Users", new PagedData(dto.PageNo, dto.PageSize, totalCount, (int)Math.Ceiling((double)totalCount / dto.PageSize)));
+                return new ApiResponse(users.Select(mapper.Map<UserResponse>).ToList(), StatusCodes.Status200OK, Keys.USERS, new PagedData(dto.PageNo, dto.PageSize, totalCount, (int)Math.Ceiling((double)totalCount / dto.PageSize)));
             }
             catch (Exception ex)
             {
                 return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
             }
+        }
+
+        public async Task<ApiResponse> GetUserProfile(UserResponse? requestor, string emailId)
+        {
+            if (requestor is null)
+            {
+                return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.REQUESTOR_DOES_NOT_EXISTS, null);
+            }
+
+            if (requestor.Role.Name != Keys.ADMIN)
+            {
+                return new ApiResponse(null, StatusCodes.Status403Forbidden, Keys.FORBIDDEN, null);
+            }
+
+            var user = await userRepository.GetByEmailId(emailId);
+            if (user is null)
+            {
+                return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.USER_DOES_NOT_EXISTS, null);
+            }
+
+            return new ApiResponse(mapper.Map<UserResponse2>(user), StatusCodes.Status200OK, Keys.USERS, null);
         }
 
         private bool IsDateOfBirthValid(DateTime dateOfBrith)
