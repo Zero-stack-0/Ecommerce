@@ -48,12 +48,13 @@ namespace Data.Repository
                 .Include(it => it.Country)
                 .Include(it => it.State)
                 .Include(it => it.City)
-                .Where(it => it.Id != requestorId);
+                .Where(it => it.Id != requestorId)
+                .OrderByDescending(it => it.Id);
 
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                query = query.Where(it => (it.FirstName + "" + it.LastName).Contains(searchTerm));
+                query = query.Where(it => (it.FirstName + " " + it.LastName).Contains(searchTerm) || it.Username.Contains(searchTerm) || it.EmailId.Contains(searchTerm));
             }
 
             var totalCount = await query.CountAsync();

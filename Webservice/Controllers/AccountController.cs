@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Dto;
+using Service.Dto.Response;
 using Service.Helper;
 using Service.Interface;
 using Webservice.Helper;
@@ -95,7 +96,22 @@ namespace Webservice.Controllers
             return View(user);
         }
 
+        public async Task<IActionResult> UserProfile(string emailId)
+        {
+            var requestor = await cookieUserDetailsHandler.GetUserDetail(this.User.Identity as ClaimsIdentity);
+            var apiResponse = await accountService.GetUserProfile(requestor, emailId);
 
+            if (apiResponse.Result is null)
+            {
+                return RedirectToAction("UserList", "Admin");
+            }
+
+            return View((UserResponse2)apiResponse.Result);
+        }
+
+        /// <summary>
+        /// API to share data to AJAX in razor pages
+        /// </summary>
         [HttpGet]
         public async Task<JsonResult> GetStates(long countryId)
         {
@@ -119,21 +135,25 @@ namespace Webservice.Controllers
             return Json(null);
         }
 
+
         private async Task CreateClaimsAndSigIn(Users user)
         {
-            var Claims = new[]
+            if (user is not null)
             {
-                new Claim(ClaimTypes.Name, user.FirstName + "" + user.LastName),
-                new Claim(ClaimTypes.Email , user.EmailId),
-                new Claim(ClaimTypes.Role, user.RoleId.ToString()),
-                new Claim(ClaimTypes.UserData, string.IsNullOrEmpty(user.ProfilePicUrl) ? "" : user.ProfilePicUrl)
-            };
+                var Claims = new[]
+                {
+                    new Claim(ClaimTypes.Name, user.FirstName + "" + user.LastName),
+                    new Claim(ClaimTypes.Email , user.EmailId),
+                    new Claim(ClaimTypes.Role, user.RoleId.ToString()),
+                    new Claim(ClaimTypes.UserData, string.IsNullOrEmpty(user.ProfilePicUrl) ? "" : user.ProfilePicUrl)
+                };
 
-            var Identity = new ClaimsIdentity(Claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var Identity = new ClaimsIdentity(Claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-            await HttpContext.SignInAsync(
-            CookieAuthenticationDefaults.AuthenticationScheme,
-            new ClaimsPrincipal(Identity));
+                await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(Identity));
+            }
         }
     }
 }
