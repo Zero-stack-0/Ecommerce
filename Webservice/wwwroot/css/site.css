@@ -91,3 +91,9 @@ body {
   background-color: #FFFFFF;
   color: #343A40;
 }
+
+@media (min-width:1024px) {
+  .container {
+    max-width: 1400px !important;
+  }
+}

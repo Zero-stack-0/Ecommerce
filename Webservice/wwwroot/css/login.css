@@ -81,3 +81,8 @@
 .hidden {
     display: none;
 }
+
+#toast-danger {
+    align-items: center;
+    justify-content: center;
+}
