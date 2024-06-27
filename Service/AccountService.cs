@@ -15,10 +15,12 @@ namespace Service
     {
         private readonly IUserRepository userRepository;
         private readonly IMapper mapper;
-        public AccountService(IUserRepository userRepository, IMapper mapper)
+        private readonly SendInBlueEmailNotificationService sendInBlueEmailNotificationService;
+        public AccountService(IUserRepository userRepository, IMapper mapper, SendInBlueEmailNotificationService sendInBlueEmailNotificationService)
         {
             this.userRepository = userRepository;
             this.mapper = mapper;
+            this.sendInBlueEmailNotificationService = sendInBlueEmailNotificationService;
         }
 
         public async Task<ApiResponse> Create(SignUpRequest dto)
@@ -43,6 +45,12 @@ namespace Service
                 }
 
                 var user = new Users(dto.FirstName, dto.LastName, dto.EmailId, HashPassword(dto.PassWord), dto.DateOfBirth, dto.UserName, dto.CountryId, dto.StateId, dto.CityId, dto.ProfilePicUrl);
+
+                var subject = $"Hello {user.FirstName}!";
+                var verfificationLink = $"https://localhost:7041/Account/VerifyAccount?accountVerificationCode={user.AccountVerificationCode}";
+                var htmlContent = $"<p>Hello {user.FirstName}, please confirm your account by clicking on given link</p> <a href={verfificationLink}>Click here</a>";
+
+                sendInBlueEmailNotificationService.SendEmail(user.EmailId, user.FirstName, subject, htmlContent);
 
                 userRepository.Add(user);
 
@@ -83,6 +91,11 @@ namespace Service
                     user.UpdateFailedLoginAttemptAndDate();
                     await userRepository.SaveAsync();
                 }
+
+                var subject = $"Hello {user.FirstName}!";
+                var htmlContent = $"<p>Hello {user.FirstName}, this is a test email from Brevo.</p>";
+
+                sendInBlueEmailNotificationService.SendEmail(user.EmailId, user.FirstName, subject, htmlContent);
 
                 return new ApiResponse(user, StatusCodes.Status200OK, Account.LOGGED_IN_SUCESSFULLY, null);
             }
@@ -156,6 +169,26 @@ namespace Service
             }
 
             return new ApiResponse(mapper.Map<UserResponse2>(user), StatusCodes.Status200OK, Keys.USERS, null);
+        }
+
+        public async Task<ApiResponse> VerifyAccount(string verificationCode)
+        {
+            var user = await userRepository.GetUserByVerificationCode(verificationCode);
+            if (user is null)
+            {
+                return new ApiResponse(null, StatusCodes.Status400BadRequest, Account.INVALID_ACCOUNT_VERIFICATION_LINK, null);
+            }
+
+            if (user.IsEmailVerified)
+            {
+                return new ApiResponse(null, StatusCodes.Status400BadRequest, Account.ACCOUNT_ALREADY_VERIFIED, null);
+            }
+
+            user.VerifyAccount();
+
+            await userRepository.SaveAsync();
+
+            return new ApiResponse(user, StatusCodes.Status200OK, Account.ACCOUNT_VERIFICATION_SUCESSFULLY, null);
         }
 
         private bool IsDateOfBirthValid(DateTime dateOfBrith)

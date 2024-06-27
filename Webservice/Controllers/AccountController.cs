@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Service;
 using Service.Dto;
 using Service.Dto.Response;
-using Service.Helper;
 using Service.Interface;
 using Webservice.Helper;
 
@@ -107,6 +107,19 @@ namespace Webservice.Controllers
             }
 
             return View((UserResponse2)apiResponse.Result);
+        }
+
+        public async Task<IActionResult> VerifyAccount(string accountVerificationCode)
+        {
+            var accountVerify = await accountService.VerifyAccount(accountVerificationCode);
+            ViewData["AccountVerifyResponseMessage"] = accountVerify.Message;
+
+            if (accountVerify.StatusCodes == StatusCodes.Status200OK)
+            {
+                return RedirectToAction("Profile", "Account");
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>

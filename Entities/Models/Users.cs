@@ -22,6 +22,7 @@ namespace Entities.Models
             StateId = stateId;
             CityId = cityId;
             ProfilePicUrl = profilePicUrl;
+            AccountVerificationCode = Guid.NewGuid().ToString() + DateTime.UtcNow.Ticks.ToString();
         }
 
         public long Id { get; set; }
@@ -49,6 +50,7 @@ namespace Entities.Models
         public State State { get; set; }
         public City City { get; set; }
         public string? ProfilePicUrl { get; set; }
+        public string? AccountVerificationCode { get; set; }
 
         public void ChangeLastLoginDate()
         {
@@ -68,6 +70,11 @@ namespace Entities.Models
         {
             FailedLoginAttempts = 0;
             AccountBlockedDueToWrongCredentialDate = null;
+        }
+
+        public void VerifyAccount()
+        {
+            IsEmailVerified = true;
         }
     }
 }
