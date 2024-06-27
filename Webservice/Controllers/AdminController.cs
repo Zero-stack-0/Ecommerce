@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Dto.Request.Admin;
 using Service.Interface;
@@ -6,6 +7,7 @@ using Webservice.Helper;
 
 namespace Webservice.Controllers
 {
+    [Authorize]
     public class AdminController : Controller
     {
         private readonly IAccountService accountService;
@@ -14,11 +16,6 @@ namespace Webservice.Controllers
         {
             this.accountService = accountService;
             this.cookieUserDetailsHandler = cookieUserDetailsHandler;
-        }
-
-        public IActionResult UserList()
-        {
-            return View();
         }
 
         public async Task<JsonResult> GetUsers(GetUserListRequest dto)
@@ -33,6 +30,11 @@ namespace Webservice.Controllers
 
             var json = Json(result);
             return Json(json);
+        }
+
+        public IActionResult Users()
+        {
+            return View();
         }
     }
 }
