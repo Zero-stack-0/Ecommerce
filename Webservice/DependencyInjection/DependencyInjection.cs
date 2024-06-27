@@ -19,6 +19,7 @@ namespace Webservice.DependencyInjection
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<CookieUserDetailsHandler>();
             services.AddAutoMapper(typeof(Service.Helper.Mapper).Assembly);
+            services.AddSingleton<SendInBlueEmailNotificationService>();
         }
     }
 }

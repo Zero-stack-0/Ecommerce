@@ -13,5 +13,6 @@ namespace Service.Interface
         Task<Country?> GetCountry(long id);
         Task<ApiResponse> GetUserList(GetUserListRequest dto);
         Task<ApiResponse> GetUserProfile(UserResponse? requestor, string emailId);
+        Task<ApiResponse> VerifyAccount(string verificationCode);
     }
 }

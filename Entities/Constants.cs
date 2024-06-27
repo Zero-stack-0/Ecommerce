@@ -22,6 +22,9 @@ namespace Entities
             public const string FAILED_LOGIN_ATTEMPT_LIMIT = "You have entered wrong credential 5 times, please try again after 24hours";
             public const string LOGGED_IN_SUCESSFULLY = "Logged in sucessfully";
             public const string USER_NOT_FOUND = "User not found";
+            public const string ACCOUNT_VERIFICATION_SUCESSFULLY = "Account verification done sucessfully";
+            public const string ACCOUNT_ALREADY_VERIFIED = "Your account is already verified";
+            public const string INVALID_ACCOUNT_VERIFICATION_LINK = "Invalid link Please contact admin";
         }
 
         public static class VIEW_DATA

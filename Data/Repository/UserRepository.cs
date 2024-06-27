@@ -66,5 +66,10 @@ namespace Data.Repository
             return (users, totalCount);
         }
 
+        public async Task<Users?> GetUserByVerificationCode(string verificationCode)
+        {
+            return await context.Users
+            .FirstOrDefaultAsync(it => it.AccountVerificationCode == verificationCode);
+        }
     }
 }
