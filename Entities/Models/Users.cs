@@ -51,6 +51,8 @@ namespace Entities.Models
         public City City { get; set; }
         public string? ProfilePicUrl { get; set; }
         public string? AccountVerificationCode { get; set; }
+        public int AccountVerificationResendCount { get; set; }
+        public DateTime? AccountVerificationCodeSentAt { get; set; }
 
         public void ChangeLastLoginDate()
         {
@@ -75,6 +77,14 @@ namespace Entities.Models
         public void VerifyAccount()
         {
             IsEmailVerified = true;
+            AccountVerificationCodeSentAt = DateTime.UtcNow;
+        }
+
+        public void ResentVerifyEmail()
+        {
+            AccountVerificationResendCount += 1;
+            AccountVerificationCodeSentAt = DateTime.UtcNow;
+            AccountVerificationCode = Guid.NewGuid().ToString() + DateTime.UtcNow.Ticks.ToString();
         }
     }
 }

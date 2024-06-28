@@ -23,6 +23,8 @@
             string roleId = claimsIdentity?.Claims.FirstOrDefault(e => e.Type.Contains("role"))?.Value ?? string.Empty;
             string profilePicUrl = claimsIdentity?.Claims.FirstOrDefault(e => e.Type.Contains("userdata"))?.Value ??
             "images/profile.png";
+            string isEmailVerified = claimsIdentity?.Claims.FirstOrDefault(e => e.Type.Contains("isemailverified"))?.Value
+            ?? string.Empty;
         }
 
 
@@ -61,8 +63,17 @@
                                     </li>
                                     <li>
                                         <a href="#"
-                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Become Seller</a>
+                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Become
+                                            Seller</a>
                                     </li>
+                                    @if (!string.IsNullOrWhiteSpace(isEmailVerified) && isEmailVerified == "False")
+                                    {
+                                        <li>
+                                            <a href="/Account/ResendEmailVerification"
+                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Resend
+                                                Email Verification</a>
+                                        </li>
+                                    }
                                 }
                                 else
                                 {

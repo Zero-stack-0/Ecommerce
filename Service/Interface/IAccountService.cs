@@ -14,5 +14,6 @@ namespace Service.Interface
         Task<ApiResponse> GetUserList(GetUserListRequest dto);
         Task<ApiResponse> GetUserProfile(UserResponse? requestor, string emailId);
         Task<ApiResponse> VerifyAccount(string verificationCode);
+        Task<ApiResponse> ResendAccountVerificationEmail(UserResponse requestor);
     }
 }
