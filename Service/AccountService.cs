@@ -46,11 +46,7 @@ namespace Service
 
                 var user = new Users(dto.FirstName, dto.LastName, dto.EmailId, HashPassword(dto.PassWord), dto.DateOfBirth, dto.UserName, dto.CountryId, dto.StateId, dto.CityId, dto.ProfilePicUrl);
 
-                var subject = $"Hello {user.FirstName}!";
-                var verfificationLink = $"https://localhost:7041/Account/VerifyAccount?accountVerificationCode={user.AccountVerificationCode}";
-                var htmlContent = $"<p>Hello {user.FirstName}, please confirm your account by clicking on given link</p> <a href={verfificationLink}>Click here</a>";
-
-                sendInBlueEmailNotificationService.SendEmail(user.EmailId, user.FirstName, subject, htmlContent);
+                SendEmailVerificationEmail(user);
 
                 userRepository.Add(user);
 
@@ -76,6 +72,13 @@ namespace Service
 
                 if (user.FailedLoginAttempts >= 5 && (DateTime.UtcNow - user.AccountBlockedDueToWrongCredentialDate.GetValueOrDefault()).Hours < 24)
                 {
+                    if (user.FailedLoginAttempts >= 5)
+                    {
+                        var subject = $"Hello {user.FirstName}!";
+                        var htmlContent = $"<p>Hello {user.FirstName}, your account is blocked due 5 failed login attempted contact support desk now to unblock your account <br> or try again after 24 hour";
+
+                        sendInBlueEmailNotificationService.SendEmail(user.EmailId, user.FirstName, subject, htmlContent);
+                    }
                     return new ApiResponse(null, StatusCodes.Status400BadRequest, Account.FAILED_LOGIN_ATTEMPT_LIMIT, null);
                 }
 
@@ -91,11 +94,6 @@ namespace Service
                     user.UpdateFailedLoginAttemptAndDate();
                     await userRepository.SaveAsync();
                 }
-
-                var subject = $"Hello {user.FirstName}!";
-                var htmlContent = $"<p>Hello {user.FirstName}, this is a test email from Brevo.</p>";
-
-                sendInBlueEmailNotificationService.SendEmail(user.EmailId, user.FirstName, subject, htmlContent);
 
                 return new ApiResponse(user, StatusCodes.Status200OK, Account.LOGGED_IN_SUCESSFULLY, null);
             }
@@ -189,6 +187,42 @@ namespace Service
             await userRepository.SaveAsync();
 
             return new ApiResponse(user, StatusCodes.Status200OK, Account.ACCOUNT_VERIFICATION_SUCESSFULLY, null);
+        }
+
+        public async Task<ApiResponse> ResendAccountVerificationEmail(UserResponse requestor)
+        {
+            var user = await userRepository.GetByEmailId(requestor.EmailId);
+            if (user is null)
+            {
+                return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.REQUESTOR_DOES_NOT_EXISTS, null);
+            }
+
+            if (user.IsEmailVerified)
+            {
+                return new ApiResponse(null, StatusCodes.Status400BadRequest, Account.ACCOUNT_ALREADY_VERIFIED, null);
+            }
+
+            if ((DateTime.UtcNow - user.AccountVerificationCodeSentAt.GetValueOrDefault()).Days < 1 && user.AccountVerificationResendCount > 5)
+            {
+                return new ApiResponse(null, StatusCodes.Status400BadRequest, Account.RESENT_EMAIL_VERIFICATION_LIMIT, null);
+            }
+
+            user.ResentVerifyEmail();
+
+            SendEmailVerificationEmail(user);
+
+            await userRepository.SaveAsync();
+
+            return new ApiResponse(user, StatusCodes.Status200OK, Account.EMAIL_VERIFICATION_SENT_SUCESSFULLY, null);
+        }
+
+        private void SendEmailVerificationEmail(Users user)
+        {
+            var subject = $"Hello {user.FirstName}!";
+            var verfificationLink = $"https://localhost:7041/Account/VerifyAccount?accountVerificationCode={user.AccountVerificationCode}";
+            var htmlContent = $"<p>Hello {user.FirstName}, please confirm your account by clicking on given link</p> <a href={verfificationLink}>Click here</a>";
+
+            sendInBlueEmailNotificationService.SendEmail(user.EmailId, user.FirstName, subject, htmlContent);
         }
 
         private bool IsDateOfBirthValid(DateTime dateOfBrith)

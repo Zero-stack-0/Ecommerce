@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Service;
 using Service.Dto;
 using Service.Dto.Response;
 using Service.Interface;
@@ -112,12 +111,31 @@ namespace Webservice.Controllers
         public async Task<IActionResult> VerifyAccount(string accountVerificationCode)
         {
             var accountVerify = await accountService.VerifyAccount(accountVerificationCode);
-            ViewData["AccountVerifyResponseMessage"] = accountVerify.Message;
 
             if (accountVerify.StatusCodes == StatusCodes.Status200OK)
             {
-                return RedirectToAction("Profile", "Account");
+                await LogOut();
+                await CreateClaimsAndSigIn((Users)accountVerify.Result);
             }
+
+            TempData["AccountVerifyResponseMessage"] = accountVerify.Message;
+            TempData["VerifyAccountStatusCode"] = accountVerify.StatusCodes.ToString();
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> ResendEmailVerification()
+        {
+            var requestor = await cookieUserDetailsHandler.GetUserDetail(this.User.Identity as ClaimsIdentity);
+            if (requestor is null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var result = await accountService.ResendAccountVerificationEmail(requestor);
+
+            TempData["AccountVerifyResponseMessage"] = result.Message;
+            TempData["VerifyAccountStatusCode"] = result.StatusCodes.ToString();
 
             return RedirectToAction("Index", "Home");
         }
@@ -158,7 +176,8 @@ namespace Webservice.Controllers
                     new Claim(ClaimTypes.Name, user.FirstName + "" + user.LastName),
                     new Claim(ClaimTypes.Email , user.EmailId),
                     new Claim(ClaimTypes.Role, user.RoleId.ToString()),
-                    new Claim(ClaimTypes.UserData, string.IsNullOrEmpty(user.ProfilePicUrl) ? "" : user.ProfilePicUrl)
+                    new Claim(ClaimTypes.UserData, string.IsNullOrEmpty(user.ProfilePicUrl) ? "" : user.ProfilePicUrl),
+                    new Claim(CustomClaimTypes.IsEmailVerified, user.IsEmailVerified.ToString())
                 };
 
                 var Identity = new ClaimsIdentity(Claims, CookieAuthenticationDefaults.AuthenticationScheme);

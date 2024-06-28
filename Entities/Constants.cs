@@ -25,6 +25,8 @@ namespace Entities
             public const string ACCOUNT_VERIFICATION_SUCESSFULLY = "Account verification done sucessfully";
             public const string ACCOUNT_ALREADY_VERIFIED = "Your account is already verified";
             public const string INVALID_ACCOUNT_VERIFICATION_LINK = "Invalid link Please contact admin";
+            public const string RESENT_EMAIL_VERIFICATION_LIMIT = "You have reched resend email verification, please contact support";
+            public const string EMAIL_VERIFICATION_SENT_SUCESSFULLY = "Email verification sent sucessfully";
         }
 
         public static class VIEW_DATA
