@@ -10,5 +10,6 @@ namespace Data.Repository.Interface
         Task<Country?> GetCountry(long id);
         Task<(ICollection<Users>, int totalCount)> UsersList(int pageNo, int pageSize, string searchTerm, long requestorId);
         Task<Users?> GetUserByVerificationCode(string verificationCode);
+        Task<Users?> GetById(long id);
     }
 }

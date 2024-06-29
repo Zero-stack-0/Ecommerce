@@ -3,8 +3,8 @@
 }
 @{
     ViewData["Title"] = "Home Page";
-    string accountVerificationMessage = TempData["AccountVerifyResponseMessage"] as string;
-    string statusCode = TempData["VerifyAccountStatusCode"] as string;
+    string accountVerificationMessage = TempData["apiResponseMessage"] as string;
+    string statusCode = TempData["apiResponseStatusCode"] as string;
 }
 
 @if (!string.IsNullOrWhiteSpace(accountVerificationMessage) && statusCode == "200")

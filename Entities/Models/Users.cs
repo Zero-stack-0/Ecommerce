@@ -86,5 +86,11 @@ namespace Entities.Models
             AccountVerificationCodeSentAt = DateTime.UtcNow;
             AccountVerificationCode = Guid.NewGuid().ToString() + DateTime.UtcNow.Ticks.ToString();
         }
+
+        public void UpdatePassword(string password)
+        {
+            HashedPassword = password;
+            LastPasswordChangeDate = DateTime.UtcNow;
+        }
     }
 }
