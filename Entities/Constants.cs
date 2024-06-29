@@ -27,6 +27,10 @@ namespace Entities
             public const string INVALID_ACCOUNT_VERIFICATION_LINK = "Invalid link Please contact admin";
             public const string RESENT_EMAIL_VERIFICATION_LIMIT = "You have reched resend email verification, please contact support";
             public const string EMAIL_VERIFICATION_SENT_SUCESSFULLY = "Email verification sent sucessfully";
+            public const string PASSWORD_RESET_EMAIL_LIMIT = "You have reached the maximum number of password reset requests for today";
+            public const string EMAIL_SENT_TO_RESET_PASSWORD = "A password reset link has been sent to your registered email address. Please check your email to reset your password.";
+            public const string PASSWORD_RESET_LINK_DOES_NOT_EXISTS = "Password reset link does not exits, please contact support or generate new link";
+            public const string PASSWORD_UPDATED_SUCESSFULLY = "Password updated sucessfully";
         }
 
         public static class VIEW_DATA

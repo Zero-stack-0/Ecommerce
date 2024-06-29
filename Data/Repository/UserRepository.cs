@@ -71,5 +71,11 @@ namespace Data.Repository
             return await context.Users
             .FirstOrDefaultAsync(it => it.AccountVerificationCode == verificationCode);
         }
+
+        public async Task<Users?> GetById(long id)
+        {
+            return await context.Users
+            .FirstOrDefaultAsync(it => it.Id == id);
+        }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Dto;
+using Service.Dto.Request;
 using Service.Dto.Response;
 using Service.Interface;
 using Webservice.Helper;
@@ -118,8 +119,8 @@ namespace Webservice.Controllers
                 await CreateClaimsAndSigIn((Users)accountVerify.Result);
             }
 
-            TempData["AccountVerifyResponseMessage"] = accountVerify.Message;
-            TempData["VerifyAccountStatusCode"] = accountVerify.StatusCodes.ToString();
+            TempData["apiResponseMessage"] = accountVerify.Message;
+            TempData["apiResponseStatusCode"] = accountVerify.StatusCodes.ToString();
 
             return RedirectToAction("Index", "Home");
         }
@@ -134,9 +135,51 @@ namespace Webservice.Controllers
 
             var result = await accountService.ResendAccountVerificationEmail(requestor);
 
-            TempData["AccountVerifyResponseMessage"] = result.Message;
-            TempData["VerifyAccountStatusCode"] = result.StatusCodes.ToString();
+            TempData["apiResponseMessage"] = result.Message;
+            TempData["apiResponseStatusCode"] = result.StatusCodes.ToString();
 
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult RequestToResetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RequestToResetPassword(PasswordRequest dto)
+        {
+            var data = await accountService.ResetPassword(dto.EmailIdOrUserName);
+            TempData["apiResponseMessage"] = data.Message;
+            TempData["apiResponseStatusCode"] = data.StatusCodes.ToString();
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> ResetPassword(string resetToken)
+        {
+            var data = await accountService.CheckTokenForResetPassword(resetToken);
+            TempData["apiResponseMessage"] = data.Message;
+            TempData["apiResponseStatusCode"] = data.StatusCodes.ToString();
+            if (data.StatusCodes == StatusCodes.Status200OK)
+            {
+                var dtoModel = new UpdatePasswordRequest()
+                {
+                    Requestor = data.Result.ToString(),
+                    ResetToken = resetToken
+                };
+                return View(dtoModel);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassWord(UpdatePasswordRequest dto)
+        {
+            var data = await accountService.UpdateUserPassword(dto);
+            TempData["apiResponseMessage"] = data.Message;
+            TempData["apiResponseStatusCode"] = data.StatusCodes.ToString();
             return RedirectToAction("Index", "Home");
         }
 

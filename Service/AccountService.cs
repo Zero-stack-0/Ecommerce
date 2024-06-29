@@ -1,8 +1,11 @@
+using System.Linq.Expressions;
+using System.Numerics;
 using AutoMapper;
 using Data.Repository.Interface;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Service.Dto;
+using Service.Dto.Request;
 using Service.Dto.Request.Admin;
 using Service.Dto.Response;
 using Service.Helper;
@@ -16,11 +19,13 @@ namespace Service
         private readonly IUserRepository userRepository;
         private readonly IMapper mapper;
         private readonly SendInBlueEmailNotificationService sendInBlueEmailNotificationService;
-        public AccountService(IUserRepository userRepository, IMapper mapper, SendInBlueEmailNotificationService sendInBlueEmailNotificationService)
+        private readonly IUserPasswordResetRequestRepository userPasswordResetRequestRepository;
+        public AccountService(IUserRepository userRepository, IMapper mapper, SendInBlueEmailNotificationService sendInBlueEmailNotificationService, IUserPasswordResetRequestRepository userPasswordResetRequestRepository)
         {
             this.userRepository = userRepository;
             this.mapper = mapper;
             this.sendInBlueEmailNotificationService = sendInBlueEmailNotificationService;
+            this.userPasswordResetRequestRepository = userPasswordResetRequestRepository;
         }
 
         public async Task<ApiResponse> Create(SignUpRequest dto)
@@ -214,6 +219,110 @@ namespace Service
             await userRepository.SaveAsync();
 
             return new ApiResponse(user, StatusCodes.Status200OK, Account.EMAIL_VERIFICATION_SENT_SUCESSFULLY, null);
+        }
+
+        public async Task<ApiResponse> ResetPassword(string emailIdOrUserName)
+        {
+            try
+            {
+                var user = await userRepository.GetByUserNameOrEmailId(emailIdOrUserName);
+                if (user is null)
+                {
+                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.REQUESTOR_DOES_NOT_EXISTS, null);
+                }
+
+                var (userPasswordResetRequests, totalCountOfRequestInDay) = await userPasswordResetRequestRepository.GetByUserId(user.Id);
+                if (userPasswordResetRequests.Any() && totalCountOfRequestInDay >= 3)
+                {
+                    return new ApiResponse(user, StatusCodes.Status400BadRequest, Account.PASSWORD_RESET_EMAIL_LIMIT, null);
+                }
+
+                var userPasswordResetRequest = new UserPasswordResetRequest(user.Id);
+
+                userPasswordResetRequestRepository.Add(userPasswordResetRequest);
+
+                await userPasswordResetRequestRepository.SaveAsync();
+
+                SendPasswordResetEmail(user, userPasswordResetRequest.ResetToken);
+
+                return new ApiResponse(user, StatusCodes.Status200OK, Account.EMAIL_SENT_TO_RESET_PASSWORD, null);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
+            }
+        }
+
+        public async Task<ApiResponse> CheckTokenForResetPassword(string resetToken)
+        {
+            var userPasswordResetRequest = await userPasswordResetRequestRepository.GetByToken(resetToken);
+            if (userPasswordResetRequest is null)
+            {
+                return new ApiResponse(null, StatusCodes.Status400BadRequest, Account.PASSWORD_RESET_LINK_DOES_NOT_EXISTS, null);
+            }
+
+            return new ApiResponse(Base64Encode(userPasswordResetRequest.UserId.ToString()), StatusCodes.Status200OK, Keys.SUCESS, null);
+        }
+
+        public async Task<ApiResponse> UpdateUserPassword(UpdatePasswordRequest dto)
+        {
+            try
+            {
+                var user = await userRepository.GetById(Convert.ToInt64(Base64Decode(dto.Requestor)));
+                if (user is null)
+                {
+                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.REQUESTOR_DOES_NOT_EXISTS, null);
+                }
+
+                var userPasswordResetRequest = await userPasswordResetRequestRepository.GetByToken(dto.ResetToken);
+                if (userPasswordResetRequest is null)
+                {
+                    return new ApiResponse(Base64Encode(userPasswordResetRequest.UserId.ToString()), StatusCodes.Status400BadRequest, Account.PASSWORD_RESET_LINK_DOES_NOT_EXISTS, null);
+                }
+
+                user.UpdatePassword(HashPassword(dto.PassWord));
+
+                userPasswordResetRequest.LinkUsed();
+
+                await userRepository.SaveAsync();
+
+                PasswordUpdatedEmail(user);
+
+                return new ApiResponse(null, StatusCodes.Status200OK, Account.PASSWORD_UPDATED_SUCESSFULLY, null);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
+            }
+        }
+
+        private void PasswordUpdatedEmail(Users user)
+        {
+            var subject = $"Hello {user.FirstName}!";
+            var htmlContent = $"<p>Hello {user.FirstName}, you have sucessfully changed your password";
+
+            sendInBlueEmailNotificationService.SendEmail(user.EmailId, user.FirstName, subject, htmlContent);
+        }
+
+        private void SendPasswordResetEmail(Users user, string resetToken)
+        {
+            var subject = $"Hello {user.FirstName}!";
+            var verfificationLink = $"https://localhost:7041/Account/ResetPassword?resetToken={resetToken}";
+            var htmlContent = $"<p>Hello {user.FirstName}, please change your password by clicking on given link </p> <a href={verfificationLink}>Click here</a>";
+
+            sendInBlueEmailNotificationService.SendEmail(user.EmailId, user.FirstName, subject, htmlContent);
+        }
+
+        private static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return Convert.ToBase64String(plainTextBytes);
+        }
+
+        private static string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
+            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
         }
 
         private void SendEmailVerificationEmail(Users user)

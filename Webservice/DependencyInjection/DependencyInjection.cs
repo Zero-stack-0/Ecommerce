@@ -13,7 +13,7 @@ namespace Webservice.DependencyInjection
         {
             //repository
             services.AddScoped<IUserRepository, UserRepository>();
-
+            services.AddScoped<IUserPasswordResetRequestRepository, UserPasswordResetRequestRepository>();
 
             //services
             services.AddScoped<IAccountService, AccountService>();
