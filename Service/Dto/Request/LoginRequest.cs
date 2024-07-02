@@ -4,5 +4,6 @@ namespace Service.Dto
     {
         public string EmailIdOrUserName { get; set; }
         public string PassWord { get; set; }
+        public bool RememberMe { get; set; }
     }
 }
