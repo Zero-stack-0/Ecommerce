@@ -39,7 +39,7 @@ namespace Webservice.Controllers
             if (data.Result is not null)
             {
                 var user = (Users)data.Result;
-                await CreateClaimsAndSigIn(user);
+                await CreateClaimsAndSigIn(user, dto.RememberMe);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -72,7 +72,7 @@ namespace Webservice.Controllers
                     }
                 }
 
-                await CreateClaimsAndSigIn((Users)response.Result);
+                await CreateClaimsAndSigIn((Users)response.Result, false);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -116,7 +116,7 @@ namespace Webservice.Controllers
             if (accountVerify.StatusCodes == StatusCodes.Status200OK)
             {
                 await LogOut();
-                await CreateClaimsAndSigIn((Users)accountVerify.Result);
+                await CreateClaimsAndSigIn((Users)accountVerify.Result, false);
             }
 
             TempData["apiResponseMessage"] = accountVerify.Message;
@@ -210,7 +210,7 @@ namespace Webservice.Controllers
         }
 
 
-        private async Task CreateClaimsAndSigIn(Users user)
+        private async Task CreateClaimsAndSigIn(Users user, bool rememberMe)
         {
             if (user is not null)
             {
@@ -225,9 +225,14 @@ namespace Webservice.Controllers
 
                 var Identity = new ClaimsIdentity(Claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
+                var authProperties = new AuthenticationProperties()
+                {
+                    IsPersistent = rememberMe,
+                    ExpiresUtc = rememberMe ? DateTime.UtcNow.AddDays(14) : DateTime.UtcNow.AddMinutes(30)
+                };
                 await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(Identity));
+                new ClaimsPrincipal(Identity), authProperties);
             }
         }
     }

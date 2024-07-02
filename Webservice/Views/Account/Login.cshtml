@@ -49,6 +49,16 @@
                 <label for="lastName">Password</label>
                 <input asp-for="PassWord" type="password" id="password" name="password" required>
             </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <div class="checkbox">
+                        <input asp-for="RememberMe" id="remember" type="checkbox"
+                            class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" />
+                        <label asp-for="RememberMe"
+                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
+                    </div>
+                </div>
+            </div>
             <div class="input-group">
                 <button type="submit">Login</button>
             </div>
