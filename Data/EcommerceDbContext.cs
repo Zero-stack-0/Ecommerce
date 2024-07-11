@@ -17,5 +17,6 @@ namespace Data
         public DbSet<ApiLogs> ApiLogs { get; set; }
         public DbSet<Country> Country { get; set; }
         public DbSet<UserPasswordResetRequest> UserPasswordResetRequest { get; set; }
+        public DbSet<SellerRequest> SellerRequest { get; set; }
     }
 }

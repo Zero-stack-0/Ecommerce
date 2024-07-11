@@ -2,7 +2,6 @@ using Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Webservice.DependencyInjection;
-using Webservice.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
 

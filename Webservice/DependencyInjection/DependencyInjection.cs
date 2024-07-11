@@ -14,9 +14,13 @@ namespace Webservice.DependencyInjection
             //repository
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserPasswordResetRequestRepository, UserPasswordResetRequestRepository>();
+            services.AddScoped<ISellerRequestRepository, SellerRequestRepository>();
 
             //services
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<ISellerService, SellerService>();
+
+            //Helpers
             services.AddScoped<CookieUserDetailsHandler>();
             services.AddAutoMapper(typeof(Service.Helper.Mapper).Assembly);
             services.AddSingleton<SendInBlueEmailNotificationService>();

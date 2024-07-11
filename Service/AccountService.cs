@@ -114,7 +114,14 @@ namespace Service
                 return null;
             }
 
-            return mapper.Map<UserResponse>(user);
+            var userResponse = mapper.Map<UserResponse>(user);
+
+            if (user.SellerRequest.Any())
+            {
+                userResponse.HasRequestForSeller = true;
+            }
+
+            return userResponse;
         }
 
         public async Task<Country?> GetCountry(long id)

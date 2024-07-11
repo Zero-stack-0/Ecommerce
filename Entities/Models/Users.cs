@@ -53,6 +53,8 @@ namespace Entities.Models
         public string? AccountVerificationCode { get; set; }
         public int AccountVerificationResendCount { get; set; }
         public DateTime? AccountVerificationCodeSentAt { get; set; }
+        public bool IsSeller { get; set; }
+        public ICollection<SellerRequest> SellerRequest { get; set; }
 
         public void ChangeLastLoginDate()
         {

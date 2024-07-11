@@ -70,3 +70,4 @@ Temporary Items
 Service/obj/*
 Data/obj/*
 Webservice/obj/*
+Webservice/appsettings.json
