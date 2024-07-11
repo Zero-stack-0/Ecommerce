@@ -19,6 +19,7 @@ namespace Data.Repository
             .Include(it => it.Country)
             .Include(it => it.State)
             .Include(it => it.City)
+            .Include(it => it.SellerRequest)
             .FirstOrDefaultAsync(it => it.EmailId == emailId);
         }
 
@@ -31,6 +32,7 @@ namespace Data.Repository
         {
             return await context.Users
             .Include(it => it.Role)
+            .Include(it => it.SellerRequest)
             .FirstOrDefaultAsync(it => (it.EmailId == emailOrUserName || it.Username == emailOrUserName) && it.IsActive && !it.IsDeleted);
         }
 

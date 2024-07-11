@@ -11,6 +11,7 @@ namespace Entities
             public const string INVALID_PAGINATION = "Invalid pagination";
             public const string USERS = "Users";
             public const string USER_DOES_NOT_EXISTS = "Users does not exists";
+            public const string DOES_NOT_EXISTS = "{0} does not exists";
         }
         public static class Account
         {
@@ -31,6 +32,14 @@ namespace Entities
             public const string EMAIL_SENT_TO_RESET_PASSWORD = "A password reset link has been sent to your registered email address. Please check your email to reset your password.";
             public const string PASSWORD_RESET_LINK_DOES_NOT_EXISTS = "Password reset link does not exits, please contact support or generate new link";
             public const string PASSWORD_UPDATED_SUCESSFULLY = "Password updated sucessfully";
+            public const string VERIFY_EMAIL_ID = "Your email is not verified, Please verify your email id";
+        }
+
+        public static class SELLER
+        {
+            public const string REQUEST_ALREADY_EXISTS = "You have already submitted a request to become a seller. Your application is currently under review. We will notify you once a decision has been made. Thank you for your patience and interest in becoming a seller on our platform.";
+            public const string REQEUST_SUBMITTED = "Your application to become a seller has been submitted successfully.";
+            public const string SELLET_REQUEST = "Seller Reqeust";
         }
 
         public static class VIEW_DATA

@@ -22,5 +22,6 @@ namespace Service.Dto
         public State State { get; set; }
         public City City { get; set; }
         public string ProfilePicUrl { get; set; }
+        public bool HasRequestForSeller { get; set; }
     }
 }

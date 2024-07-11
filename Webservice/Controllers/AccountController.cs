@@ -220,7 +220,8 @@ namespace Webservice.Controllers
                     new Claim(ClaimTypes.Email , user.EmailId),
                     new Claim(ClaimTypes.Role, user.RoleId.ToString()),
                     new Claim(ClaimTypes.UserData, string.IsNullOrEmpty(user.ProfilePicUrl) ? "" : user.ProfilePicUrl),
-                    new Claim(CustomClaimTypes.IsEmailVerified, user.IsEmailVerified.ToString())
+                    new Claim(CustomClaimTypes.IsEmailVerified, user.IsEmailVerified.ToString()),
+                    new Claim(CustomClaimTypes.HasRequestForSeller, user.SellerRequest.Any().ToString())
                 };
 
                 var Identity = new ClaimsIdentity(Claims, CookieAuthenticationDefaults.AuthenticationScheme);
