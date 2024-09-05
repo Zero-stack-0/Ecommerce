@@ -19,5 +19,6 @@ namespace Service.Interface
         Task<ApiResponse> ResetPassword(string emailIdOrUserName);
         Task<ApiResponse> CheckTokenForResetPassword(string resetToken);
         Task<ApiResponse> UpdateUserPassword(UpdatePasswordRequest dto);
+        Task<ApiResponse> UpdateProfile(UpdateProfileRequest dto);
     }
 }

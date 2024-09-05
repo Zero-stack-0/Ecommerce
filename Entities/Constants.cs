@@ -12,6 +12,7 @@ namespace Entities
             public const string USERS = "Users";
             public const string USER_DOES_NOT_EXISTS = "Users does not exists";
             public const string DOES_NOT_EXISTS = "{0} does not exists";
+            public const string SELLER_REQUEST = "Seller Request";
         }
         public static class Account
         {
@@ -33,6 +34,7 @@ namespace Entities
             public const string PASSWORD_RESET_LINK_DOES_NOT_EXISTS = "Password reset link does not exits, please contact support or generate new link";
             public const string PASSWORD_UPDATED_SUCESSFULLY = "Password updated sucessfully";
             public const string VERIFY_EMAIL_ID = "Your email is not verified, Please verify your email id";
+            public const string PROFILE_UPDATED_SUCESSFULLY = "Profile updated successfully";
         }
 
         public static class SELLER
@@ -40,6 +42,9 @@ namespace Entities
             public const string REQUEST_ALREADY_EXISTS = "You have already submitted a request to become a seller. Your application is currently under review. We will notify you once a decision has been made. Thank you for your patience and interest in becoming a seller on our platform.";
             public const string REQEUST_SUBMITTED = "Your application to become a seller has been submitted successfully.";
             public const string SELLET_REQUEST = "Seller Reqeust";
+            public const string ONLY_STATUS_OF_PENDING_REQUEST_CAN_CHANGE = "Only pending seller request status can be updated";
+
+            public const string SELLET_REQUEST_UPDATED_SUCESSFULLY = "Seller request status updated sucessfully";
         }
 
         public static class VIEW_DATA

@@ -5,5 +5,6 @@ namespace Data.Repository.Interface
     public interface ISellerRequestRepository : IBaseRepository
     {
         Task<SellerRequest?> GetByUserId(long userId);
+        Task<(ICollection<SellerRequest>, int totalCount)> GetRequests(int pageNo, int pageSize, string searchTerm, SellerReqeustStatus? status);
     }
 }

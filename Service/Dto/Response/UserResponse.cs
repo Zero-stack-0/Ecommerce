@@ -10,7 +10,7 @@ namespace Service.Dto
         public string LastName { get; set; }
         public string EmailId { get; set; }
         public bool IsEmailVerified { get; set; }
-
+        public bool IsSeller { get; set; }
         public DateTime CreatedOn { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime LastLoginDate { get; set; }
