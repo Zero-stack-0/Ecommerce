@@ -29,6 +29,10 @@
             string hasRequestedForSeller = claimsIdentity?.Claims.FirstOrDefault(e =>
             e.Type.Contains("hasrequestrorseller"))?.Value
             ?? string.Empty;
+
+            string isSeller = claimsIdentity?.Claims.FirstOrDefault(e =>
+            e.Type.Contains("isseller"))?.Value
+            ?? string.Empty;
         }
 
 
@@ -78,11 +82,22 @@
                                     @if (!string.IsNullOrWhiteSpace(isEmailVerified) && isEmailVerified == "True" &&
                                    !string.IsNullOrEmpty(hasRequestedForSeller) && hasRequestedForSeller == "True")
                                     {
-                                        <li>
-                                            <a href="/Seller/ViewRequest"
-                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">View
-                                                Seller Request</a>
-                                        </li>
+                                        if (isSeller == "False")
+                                        {
+                                            <li>
+                                                <a href="/Seller/ViewRequest"
+                                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">View
+                                                    Seller Request</a>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li>
+                                                <a href="/Seller/StoreDetail"
+                                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">View
+                                                    View Store Detail</a>
+                                            </li>
+                                        }
                                     }
 
                                     @if (!string.IsNullOrWhiteSpace(isEmailVerified) && isEmailVerified == "False")

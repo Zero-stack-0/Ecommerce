@@ -54,7 +54,7 @@ namespace Entities.Models
         public int AccountVerificationResendCount { get; set; }
         public DateTime? AccountVerificationCodeSentAt { get; set; }
         public bool IsSeller { get; set; }
-        public ICollection<SellerRequest> SellerRequest { get; set; }
+        public SellerRequest SellerRequest { get; set; }
 
         public void ChangeLastLoginDate()
         {
@@ -93,6 +93,20 @@ namespace Entities.Models
         {
             HashedPassword = password;
             LastPasswordChangeDate = DateTime.UtcNow;
+        }
+
+        public void UpdateSeller()
+        {
+            IsSeller = true;
+        }
+
+        public void Update(string firstName, string lastName, string userName, string? profilePicUrl)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            Username = userName;
+            ProfilePicUrl = profilePicUrl;
+            UpdatedOn = DateTime.UtcNow;
         }
     }
 }

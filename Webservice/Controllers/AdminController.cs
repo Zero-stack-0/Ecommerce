@@ -12,10 +12,12 @@ namespace Webservice.Controllers
     {
         private readonly IAccountService accountService;
         private readonly CookieUserDetailsHandler cookieUserDetailsHandler;
-        public AdminController(IAccountService accountService, CookieUserDetailsHandler cookieUserDetailsHandler)
+        private readonly ISellerService sellerService;
+        public AdminController(IAccountService accountService, CookieUserDetailsHandler cookieUserDetailsHandler, ISellerService sellerService)
         {
             this.accountService = accountService;
             this.cookieUserDetailsHandler = cookieUserDetailsHandler;
+            this.sellerService = sellerService;
         }
 
         public async Task<JsonResult> GetUsers(GetUserListRequest dto)
@@ -33,6 +35,25 @@ namespace Webservice.Controllers
         }
 
         public IActionResult Users()
+        {
+            return View();
+        }
+
+        public async Task<JsonResult> GetSellerRequestList(GetSellerRequestList dto)
+        {
+            dto.Requestor = await cookieUserDetailsHandler.GetUserDetail(User.Identity as ClaimsIdentity);
+            if (dto.Requestor is null)
+            {
+                return Json(null);
+            }
+
+            var result = await sellerService.GetRequestList(dto);
+
+            var json = Json(result);
+            return Json(json);
+        }
+
+        public IActionResult SellerRequests()
         {
             return View();
         }

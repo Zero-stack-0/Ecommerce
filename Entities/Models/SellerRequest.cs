@@ -26,6 +26,11 @@ namespace Entities.Models
         public long UserId { get; set; }
         public DateTime CreatedAt { get; set; }
         public Users User { get; set; }
+
+        public void UpdateStatus(SellerReqeustStatus status)
+        {
+            Status = status;
+        }
     }
 
     public enum PaymentMethod

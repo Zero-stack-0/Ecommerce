@@ -116,7 +116,7 @@ namespace Service
 
             var userResponse = mapper.Map<UserResponse>(user);
 
-            if (user.SellerRequest.Any())
+            if (user.SellerRequest is not null)
             {
                 userResponse.HasRequestForSeller = true;
             }
@@ -294,6 +294,51 @@ namespace Service
                 PasswordUpdatedEmail(user);
 
                 return new ApiResponse(null, StatusCodes.Status200OK, Account.PASSWORD_UPDATED_SUCESSFULLY, null);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
+            }
+        }
+
+        public async Task<ApiResponse> UpdateProfile(UpdateProfileRequest dto)
+        {
+            try
+            {
+                if (dto.Requestor is null)
+                {
+                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.REQUESTOR_DOES_NOT_EXISTS, null);
+                }
+
+                if (dto.EmailId != dto.Requestor.EmailId)
+                {
+                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.FORBIDDEN, null);
+                }
+
+                var user = await userRepository.GetByEmailId(dto.EmailId);
+                if (user is null)
+                {
+                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.REQUESTOR_DOES_NOT_EXISTS, null);
+                }
+
+                if (!user.IsEmailVerified)
+                {
+                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Account.VERIFY_EMAIL_ID, null);
+                }
+
+                if (!string.IsNullOrWhiteSpace(user.ProfilePicUrl) && dto.ProfilePicUrl is null)
+                {
+                    dto.ProfilePicUrl = user.ProfilePicUrl;
+                }
+
+                user.Update(dto.FirstName, dto.LastName, dto.UserName, dto.ProfilePicUrl);
+
+                userRepository.Update(user);
+
+                await userRepository.SaveAsync();
+
+                return new ApiResponse(user, StatusCodes.Status200OK, Account.PROFILE_UPDATED_SUCESSFULLY, null);
+
             }
             catch (Exception ex)
             {

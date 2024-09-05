@@ -39,7 +39,7 @@ namespace Webservice.Controllers
             if (data.Result is not null)
             {
                 var user = (Users)data.Result;
-                await CreateClaimsAndSigIn(user, dto.RememberMe);
+                await CreateClaimsAndSigIn(user, dto.RememberMe, false);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -72,7 +72,7 @@ namespace Webservice.Controllers
                     }
                 }
 
-                await CreateClaimsAndSigIn((Users)response.Result, false);
+                await CreateClaimsAndSigIn((Users)response.Result, false, true);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -116,7 +116,7 @@ namespace Webservice.Controllers
             if (accountVerify.StatusCodes == StatusCodes.Status200OK)
             {
                 await LogOut();
-                await CreateClaimsAndSigIn((Users)accountVerify.Result, false);
+                await CreateClaimsAndSigIn((Users)accountVerify.Result, false, false);
             }
 
             TempData["apiResponseMessage"] = accountVerify.Message;
@@ -183,6 +183,31 @@ namespace Webservice.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public async Task<IActionResult> UpdateProfile(UpdateProfileRequest dto)
+        {
+            dto.Requestor = await cookieUserDetailsHandler.GetUserDetail(User.Identity as ClaimsIdentity);
+
+            if (dto.ProfilePic is not null)
+            {
+                dto.ProfilePicUrl = Path.Combine("uploads", dto.ProfilePic.FileName);
+                var path = Path.Combine(environment.WebRootPath, "uploads", dto.ProfilePic.FileName);
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await dto.ProfilePic.CopyToAsync(stream);
+                }
+            }
+            var data = await accountService.UpdateProfile(dto);
+            TempData["apiResponseMessage"] = data.Message;
+            TempData["apiResponseStatusCode"] = data.StatusCodes.ToString();
+
+            if (data.StatusCodes == StatusCodes.Status200OK)
+            {
+                await CreateClaimsAndSigIn((Users)data.Result, false, false);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
         /// <summary>
         /// API to share data to AJAX in razor pages
         /// </summary>
@@ -210,7 +235,7 @@ namespace Webservice.Controllers
         }
 
 
-        private async Task CreateClaimsAndSigIn(Users user, bool rememberMe)
+        private async Task CreateClaimsAndSigIn(Users user, bool rememberMe, bool isFromSignUp)
         {
             if (user is not null)
             {
@@ -221,7 +246,8 @@ namespace Webservice.Controllers
                     new Claim(ClaimTypes.Role, user.RoleId.ToString()),
                     new Claim(ClaimTypes.UserData, string.IsNullOrEmpty(user.ProfilePicUrl) ? "" : user.ProfilePicUrl),
                     new Claim(CustomClaimTypes.IsEmailVerified, user.IsEmailVerified.ToString()),
-                    new Claim(CustomClaimTypes.HasRequestForSeller, user.SellerRequest.Any().ToString())
+                    new Claim(CustomClaimTypes.HasRequestForSeller, !isFromSignUp ? (user.SellerRequest is not null).ToString() : "False"),
+                    new Claim(CustomClaimTypes.IsSeller, user.IsSeller.ToString())
                 };
 
                 var Identity = new ClaimsIdentity(Claims, CookieAuthenticationDefaults.AuthenticationScheme);
