@@ -36,7 +36,8 @@ namespace Entities.Models
     public enum PaymentMethod
     {
         Online = 1,
-        COD
+        COD,
+        BOTH
     }
 
     public enum SellerReqeustStatus

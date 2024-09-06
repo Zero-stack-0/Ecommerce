@@ -12,6 +12,13 @@ namespace Data.Repository
             this.context = context;
         }
 
+        public async Task<SellerRequest?> GetById(long id)
+        {
+            return await context.SellerRequest
+            .Include(it => it.User)
+            .FirstOrDefaultAsync(it => it.Id == id);
+        }
+
         public async Task<SellerRequest?> GetByUserId(long userId)
         {
             return await context.SellerRequest
@@ -25,10 +32,9 @@ namespace Data.Repository
             .Include(it => it.User)
             .OrderByDescending(it => it.Id);
 
-
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                query = query.Where(it => (it.User.FirstName + " " + it.User.LastName).Contains(searchTerm));
+                query = query.Where(it => (it.User.FirstName + " " + it.User.LastName).Contains(searchTerm) || it.StoreName.Contains(searchTerm));
             }
 
             if (status is not null)

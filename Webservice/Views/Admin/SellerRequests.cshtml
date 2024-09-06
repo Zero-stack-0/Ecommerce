@@ -5,78 +5,50 @@
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <div
         class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
-        <div>
-            <button id="dropdownActionButton" data-dropdown-toggle="dropdownAction"
-                class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                type="button">
-                <span class="sr-only">Action button</span>
-                Action
-                <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 10 6">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="m1 1 4 4 4-4" />
-                </svg>
-            </button>
-            <div id="dropdownAction"
-                class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-                <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownActionButton">
-                    <li>
-                        <a href="#"
-                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Reward</a>
-                    </li>
-                    <li>
-                        <a href="#"
-                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Promote</a>
-                    </li>
-                    <li>
-                        <a href="#"
-                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Activate
-                            account</a>
-                    </li>
-                </ul>
-                <div class="py-1">
-                    <a href="#"
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete
-                        User</a>
-                </div>
-            </div>
-        </div>
-        <label for="table-search" class="sr-only">Search</label>
-        <div class="relative">
-            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                </svg>
-            </div>
-            <input type="text" id="table-search-users"
-                class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search for users" oninput="loadUsersAfterSearch(1)">
-        </div>
+
     </div>
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="px-6 py-3">
-                    Name
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    ContactNumber
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Address
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Payment
-                </th>
-            </tr>
-        </thead>
-        <tbody id="tbody">
+    <label for="table-search" class="sr-only">Search</label>
+    <div class="relative">
+        <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+            </svg>
+        </div>
+        <input type="text" id="table-search-users"
+            class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Search for users" oninput="loadUsersAfterSearch(1)">
+    </div>
+</div>
+<table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+            <th scope="col" class="px-6 py-3">
+                Name
+            </th>
+            <th scope="col" class="px-6 py-3">
+                ContactNumber
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Address
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Payment
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Status
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody id="tbody">
 
-        </tbody>
+    </tbody>
 
-    </table>
+</table>
 </div>
 <nav aria-label="Page navigation example" id="pagination">
 
@@ -91,7 +63,9 @@
             .then(response => response.json())
             .then(json => {
                 if (json.value.result.length > 0) {
+                    tbody_row.innerHTML = '';
                     json.value.result.forEach(sellerReqeust => {
+
                         var tr_for_user_row = document.createElement("tr");
                         tr_for_user_row.className = "bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600";
 
@@ -114,16 +88,9 @@
 
                         div_for_user_row.appendChild(user_name_div);
 
-                        var user_email_div = document.createElement("div");
-                        user_email_div.className = "font-normal text-gray-500";
-
-
-                        .textContent = sellerReqeust.storeContactNumber;
-                        div_for_user_row.appendChild(user_email_div);
-
                         var td_for_state = document.createElement("td");
                         td_for_state.className = "px-6 py-4";
-                        td_for_state.textContent = sellerReqeust.storeAddress;
+                        td_for_state.textContent = sellerReqeust.storeContactNumber;
                         tr_for_user_row.appendChild(td_for_state);
 
                         var td_for_username = document.createElement("td");
@@ -131,16 +98,77 @@
 
                         var div_for_user_name = document.createElement('div');
                         div_for_user_name.className = "flex items-center";
-                        div_for_user_name.textContent = sellerReqeust.paymentMethod;
+                        div_for_user_name.textContent = sellerReqeust.storeAddress;
                         td_for_username.appendChild(div_for_user_name);
 
                         tr_for_user_row.appendChild(td_for_username);
 
                         var td_for_action = document.createElement("td");
                         td_for_action.className = "px-6 py-4";
-                        td_for_action.textContent = "view detail";
+
+                        if (sellerReqeust.paymentMethod === 1) {
+                            td_for_action.textContent = "Online";
+                        }
+                        else if (sellerReqeust.paymentMethod === 2) {
+                            td_for_action.textContent = "COD";
+                        }
+                        else {
+                            td_for_action.textContent = "BOTH";
+                        }
 
                         tr_for_user_row.appendChild(td_for_action);
+
+                        var td_for_status = document.createElement("td");
+                        td_for_status.className = "px-6 py-4";
+                        if (sellerReqeust.status === 1) {
+                            td_for_status.textContent = "Pending";
+                        }
+                        else if (sellerReqeust.status === 2) {
+                            td_for_status.textContent = "Accepted";
+                        }
+                        else {
+                            td_for_status.textContent = "Rejected";
+                        }
+
+                        tr_for_user_row.appendChild(td_for_status);
+
+                        var td_for_status_action = document.createElement("td");
+                        td_for_status_action.className = "px-6 py-4";
+
+
+                        if (sellerReqeust.status === 1) {
+                            var actionContainer = document.createElement("div");
+                            actionContainer.style.display = "inline-flex";
+                            actionContainer.style.gap = "5px";
+
+
+                            var a_for_accepted_req = document.createElement("a");
+                            a_for_accepted_req.textContent = "Accept";
+                            a_for_accepted_req.href = `/Seller/Update?SellerRequestId=${sellerReqeust.id}&Status=${2}`;
+
+                            var separator = document.createTextNode("/");
+
+                            var a_for_reject_req = document.createElement("a");
+                            a_for_reject_req.textContent = "Reject";
+                            a_for_reject_req.href = `/Seller/Update?SellerRequestId=${sellerReqeust.id}&Status=${3}`;
+
+
+                            actionContainer.appendChild(a_for_accepted_req);
+                            actionContainer.appendChild(separator);
+                            actionContainer.appendChild(a_for_reject_req);
+
+
+                            td_for_status_action.appendChild(actionContainer);
+
+                        }
+                        else {
+                            var p = document.createElement("p");
+                            p.innerText = "No action can be performed";
+                            td_for_status_action.appendChild(p);
+                        }
+
+                        tr_for_user_row.appendChild(td_for_status_action);
+
                     });
                 } else {
                     document.getElementById('toast_default').innerHTML = '';

@@ -89,7 +89,7 @@ namespace Service
                 return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.FORBIDDEN, null);
             }
 
-            var sellerRequest = await sellerRequestRepository.GetByUserId(dto.Requestor.Id);
+            var sellerRequest = await sellerRequestRepository.GetById(dto.SellerRequestId);
             if (sellerRequest is null)
             {
                 return new ApiResponse(null, StatusCodes.Status400BadRequest, string.Format(Keys.DOES_NOT_EXISTS, SELLER.SELLET_REQUEST), null);
