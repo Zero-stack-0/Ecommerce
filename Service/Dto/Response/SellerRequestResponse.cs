@@ -5,6 +5,7 @@ namespace Service.Dto.Response
 {
     public class SellerRequestResponse
     {
+        public long Id { get; set; }
         public string StoreName { get; set; }
         public string StoreAddress { get; set; }
         public string StoreContactNumber { get; set; }

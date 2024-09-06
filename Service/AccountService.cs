@@ -337,6 +337,8 @@ namespace Service
 
                 await userRepository.SaveAsync();
 
+                SendProfileUpdatedEmail(user);
+
                 return new ApiResponse(user, StatusCodes.Status200OK, Account.PROFILE_UPDATED_SUCESSFULLY, null);
 
             }
@@ -380,6 +382,14 @@ namespace Service
             var subject = $"Hello {user.FirstName}!";
             var verfificationLink = $"https://localhost:7041/Account/VerifyAccount?accountVerificationCode={user.AccountVerificationCode}";
             var htmlContent = $"<p>Hello {user.FirstName}, please confirm your account by clicking on given link</p> <a href={verfificationLink}>Click here</a>";
+
+            sendInBlueEmailNotificationService.SendEmail(user.EmailId, user.FirstName, subject, htmlContent);
+        }
+
+        private void SendProfileUpdatedEmail(Users user)
+        {
+            var subject = $"Hello {user.FirstName}!";
+            var htmlContent = $"<p>Hello {user.FirstName}, your profile is updated sucessfully";
 
             sendInBlueEmailNotificationService.SendEmail(user.EmailId, user.FirstName, subject, htmlContent);
         }
