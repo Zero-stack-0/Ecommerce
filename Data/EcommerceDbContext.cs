@@ -20,5 +20,6 @@ namespace Data
         public DbSet<SellerRequest> SellerRequest { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<Product> Product { get; set; }
+        public DbSet<SellerStoreInfo> SellerStoreInfo { get; set; }
     }
 }

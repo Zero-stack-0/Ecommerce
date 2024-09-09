@@ -17,6 +17,7 @@ namespace Webservice.DependencyInjection
             services.AddScoped<ISellerRequestRepository, SellerRequestRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ISellerStoreInfoRepository, SellerStoreInfoRepository>();
 
             //services
             services.AddScoped<IAccountService, AccountService>();

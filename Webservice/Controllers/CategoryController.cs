@@ -2,7 +2,6 @@ using System.Security.Claims;
 using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Service.Dto;
 using Service.Dto.Request.Admin.Category;
 using Service.Interface;
 using Webservice.Helper;
@@ -81,6 +80,19 @@ namespace Webservice.Controllers
             return Json(json);
         }
 
+        public async Task<JsonResult> GetCategoryForUser()
+        {
+            var requestor = await cookieUserDetailsHandler.GetUserDetail(User.Identity as ClaimsIdentity);
+            if (requestor is null)
+            {
+                return Json(null);
+            }
+
+            var result = await categoryService.GetListForOwner(requestor);
+
+            var json = Json(result);
+            return Json(json);
+        }
         public IActionResult List()
         {
             return View();

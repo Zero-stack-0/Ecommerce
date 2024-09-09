@@ -1,0 +1,130 @@
+@model Service.Dto.Request.Product.AddRequest;
+<div class="max-w-lg mx-auto mt-10">
+    <div class="bg-white shadow-lg rounded-lg p-6">
+        <h2 class="text-2xl font-semibold mb-6">Add New Product</h2>
+
+        <form asp-action="Add" asp-controller="Product" method="post" enctype="multipart/form-data">
+            <!-- Name -->
+            <div class="mb-4">
+                <label for="Name" class="block text-sm font-medium text-gray-700">Product Name</label>
+                <input asp-for="Name" type="text" id="Name"
+                    class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter product name" required />
+                <span asp-validation-for="Name" class="text-red-500 text-sm"></span>
+            </div>
+
+            <!-- SKU -->
+            <div class="mb-4">
+                <label for="SKU" class="block text-sm font-medium text-gray-700">SKU</label>
+                <input asp-for="SKU" type="text" id="SKU"
+                    class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter product SKU" required />
+                <span asp-validation-for="SKU" class="text-red-500 text-sm"></span>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-4">
+                <label for="Description" class="block text-sm font-medium text-gray-700">Description</label>
+                <textarea asp-for="Description" id="Description" rows="4"
+                    class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter product description"></textarea>
+                <span asp-validation-for="Description" class="text-red-500 text-sm"></span>
+            </div>
+
+            <!-- Quantity -->
+            <div class="mb-4">
+                <label for="Quantity" class="block text-sm font-medium text-gray-700">Quantity</label>
+                <input asp-for="Quantity" type="number" id="Quantity"
+                    class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                    min="1" required />
+                <span asp-validation-for="Quantity" class="text-red-500 text-sm"></span>
+            </div>
+
+            <!-- Price -->
+            <div class="mb-4">
+                <label for="Price" class="block text-sm font-medium text-gray-700">Price</label>
+                <input asp-for="Price" type="number" step="0.01" id="Price"
+                    class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                    required />
+                <span asp-validation-for="Price" class="text-red-500 text-sm"></span>
+            </div>
+
+            <!-- Discount -->
+            <div class="mb-4">
+                <label for="Discount" class="block text-sm font-medium text-gray-700">Discount</label>
+                <input asp-for="Discount" type="number" step="0.01" id="Discount"
+                    class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter discount" />
+                <span asp-validation-for="Discount" class="text-red-500 text-sm"></span>
+            </div>
+
+            <!-- Max Order Quantity -->
+            <div class="mb-4">
+                <label for="MaxOrderQuantity" class="block text-sm font-medium text-gray-700">Max Order Quantity</label>
+                <input asp-for="MaxOrderQuantity" type="number" id="MaxOrderQuantity"
+                    class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                    min="1" required />
+                <span asp-validation-for="MaxOrderQuantity" class="text-red-500 text-sm"></span>
+            </div>
+
+            <div class="mb-4">
+                <label for="CategoryId" class="block text-sm font-medium text-gray-700">Category</label>
+                <select asp-for="CategoryId" id="CategoryId"
+                    class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+
+                </select>
+                <span asp-validation-for="CategoryId" class="text-red-500 text-sm"></span>
+            </div>
+
+            <div class="mb-4">
+                <label for="Image" class="block text-sm font-medium text-gray-700">Product Image</label>
+                <input asp-for="Image" type="file" id="ImageUrl"
+                    class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" />
+                <span asp-validation-for="Image" class="text-red-500 text-sm"></span>
+            </div>
+
+            <div class="mt-6">
+                <button type="submit"
+                    class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                    Add Product
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script src="https://unpkg.com/flowbite@1.6.6/dist/flowbite.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        loadCategory();
+    });
+
+    function loadCategory() {
+        var category_div = document.getElementById("CategoryId");
+        category_div.innerHTML = "";
+        var option_first = document.createElement("option");
+        option_first.textContent = "--Select Category--";
+        category_div.appendChild(option_first);
+        fetch(`/Category/GetCategoryForUser`)
+            .then(response => response.json())
+            .then(json => {
+                if (json.value.result.length > 0) {
+                    json.value.result.forEach(category => {
+                        var option = document.createElement("option");
+                        option.value = category.id;
+                        option.text = category.name;
+                        category_div.appendChild(option);
+
+                    })
+                }
+            })
+    }
+
+
+</script>

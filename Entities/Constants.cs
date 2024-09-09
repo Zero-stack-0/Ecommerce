@@ -56,6 +56,12 @@ namespace Entities
             public const string UPDATED_SUCESSFULLY = "Category updated successfully";
         }
 
+        public static class PRODUCT
+        {
+            public const string PRODUCT_ALREADY_EXISTS_WITH_SKU = "Product with same sku number already exists";
+            public const string PRODUCT_ADDED_SUCESSFULLY = "Product added succesfully";
+        }
+
         public static class VIEW_DATA
         {
             public const string LOGIN_MESSAGE = "LoginMessage";
