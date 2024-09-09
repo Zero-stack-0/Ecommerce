@@ -1,0 +1,40 @@
+@model Entities.Models.Category;
+
+<div class="max-w-md mx-auto mt-10">
+    <div class="bg-white shadow-lg rounded-lg p-6">
+        <h2 class="text-2xl font-semibold mb-6">Update Category</h2>
+
+        <form asp-action="Update" asp-asp-controller="Category" method="Post">
+            <input type="hidden" asp-for="Id" value="@Model.Id" />
+            <div class="mb-4">
+                <label for="Name" class="block text-sm font-medium text-gray-700">Category Name</label>
+                <input asp-for="Name" type="text" id="Name"
+                    class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter category name" value="@Model.Name" required>
+                <span asp-validation-for="Name" class="text-red-500 text-sm"></span>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-4">
+                <label for="Description" class="block text-sm font-medium text-gray-700">Description</label>
+                <textarea asp-for="Description" id="Description" rows="3"
+                    class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter category description">@Model.Description</textarea>
+                <span asp-validation-for="Description" class="text-red-500 text-sm"></span>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="mt-6">
+                <button type="submit"
+                    class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                    Update Category
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/flowbite@1.6.6/dist/flowbite.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+}

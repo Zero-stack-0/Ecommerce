@@ -13,6 +13,7 @@ namespace Entities
             public const string USER_DOES_NOT_EXISTS = "Users does not exists";
             public const string DOES_NOT_EXISTS = "{0} does not exists";
             public const string SELLER_REQUEST = "Seller Request";
+            public const string CATEGORY = "Category";
         }
         public static class Account
         {
@@ -45,6 +46,14 @@ namespace Entities
             public const string ONLY_STATUS_OF_PENDING_REQUEST_CAN_CHANGE = "Only pending seller request status can be updated";
 
             public const string SELLET_REQUEST_UPDATED_SUCESSFULLY = "Seller request status updated sucessfully";
+        }
+
+        public static class CATEGORY
+        {
+            public const string CATEGORY_ALREADY_EXISTS = "Category with same name already exists";
+            public const string ADDED_SUCESSFULLY = "Category added successfully";
+            public const string DELETED_SUCESSFULLY = "Category deleted successfully";
+            public const string UPDATED_SUCESSFULLY = "Category updated successfully";
         }
 
         public static class VIEW_DATA

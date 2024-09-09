@@ -16,10 +16,12 @@ namespace Service
     {
         private readonly ISellerRequestRepository sellerRequestRepository;
         private readonly IMapper mapper;
-        public SellerService(ISellerRequestRepository sellerRequestRepository, IMapper mapper)
+        private readonly SendInBlueEmailNotificationService sendInBlueEmailNotificationService;
+        public SellerService(ISellerRequestRepository sellerRequestRepository, IMapper mapper, SendInBlueEmailNotificationService sendInBlueEmailNotificationService)
         {
             this.sellerRequestRepository = sellerRequestRepository;
             this.mapper = mapper;
+            this.sendInBlueEmailNotificationService = sendInBlueEmailNotificationService;
         }
 
         public async Task<ApiResponse> Request(SellerRequestDto dto)
@@ -107,6 +109,8 @@ namespace Service
                 sellerRequest.User.UpdateSeller();
             }
 
+            SendUpdatedStatusEmail(sellerRequest.User, dto.Status.ToString());
+
             await sellerRequestRepository.SaveAsync();
 
             return new ApiResponse(sellerRequest, StatusCodes.Status200OK, SELLER.SELLET_REQUEST_UPDATED_SUCESSFULLY, null);
@@ -132,6 +136,24 @@ namespace Service
             var (sellerRequests, totalCount) = await sellerRequestRepository.GetRequests(dto.PageNo, dto.PageSize, dto.SearchTerm, dto.Status);
 
             return new ApiResponse(sellerRequests.Select(mapper.Map<SellerRequestResponse>).ToList(), StatusCodes.Status200OK, Keys.SELLER_REQUEST, new PagedData(dto.PageNo, dto.PageSize, totalCount, (int)Math.Ceiling((double)totalCount / dto.PageSize)));
+        }
+
+        private void SendUpdatedStatusEmail(Users user, string status)
+        {
+            var subject = $"Hello {user.FirstName}!";
+
+            string htmlContent;
+            if (status == "Accepted")
+            {
+                htmlContent = $"<p>Hello {user.FirstName}, your seller reqeust has been {status}";
+            }
+            else
+            {
+                htmlContent = $"<p>Hello {user.FirstName}, We regret to inform you that your seller reqeust has {status}";
+            }
+
+
+            sendInBlueEmailNotificationService.SendEmail(user.EmailId, user.FirstName, subject, htmlContent);
         }
     }
 }
