@@ -15,10 +15,14 @@ namespace Webservice.DependencyInjection
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserPasswordResetRequestRepository, UserPasswordResetRequestRepository>();
             services.AddScoped<ISellerRequestRepository, SellerRequestRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             //services
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ISellerService, SellerService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICategoryService, CategoryService>();
 
             //Helpers
             services.AddScoped<CookieUserDetailsHandler>();

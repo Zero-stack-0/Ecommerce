@@ -18,5 +18,7 @@ namespace Data
         public DbSet<Country> Country { get; set; }
         public DbSet<UserPasswordResetRequest> UserPasswordResetRequest { get; set; }
         public DbSet<SellerRequest> SellerRequest { get; set; }
+        public DbSet<Category> Category { get; set; }
+        public DbSet<Product> Product { get; set; }
     }
 }
