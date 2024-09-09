@@ -40,5 +40,10 @@ namespace Data.Repository
         {
             return await context.Category.FirstOrDefaultAsync(it => it.Id == id);
         }
+
+        public async Task<ICollection<Category>> GetListForUser()
+        {
+            return await context.Category.Where(it => !it.IsDeleted).OrderByDescending(it => it.Id).ToListAsync();
+        }
     }
 }

@@ -55,6 +55,8 @@ namespace Entities.Models
         public DateTime? AccountVerificationCodeSentAt { get; set; }
         public bool IsSeller { get; set; }
         public SellerRequest SellerRequest { get; set; }
+        // public long SellerStoreInfoId { get; set; }
+        // public SellerStoreInfo SellerStoreInfo { get; set; }
 
         public void ChangeLastLoginDate()
         {
