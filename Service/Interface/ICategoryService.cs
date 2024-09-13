@@ -11,6 +11,6 @@ namespace Service.Interface
         Task<ApiResponse> Delete(DeleteRequest dto);
         Task<ApiResponse> Update(UpdateRequest dto);
         Task<ApiResponse> GetById(long id, UserResponse requestor);
-        Task<ApiResponse> GetListForOwner(UserResponse requestor);
+        Task<ApiResponse> GetListForOwner();
     }
 }

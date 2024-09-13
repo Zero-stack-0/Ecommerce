@@ -172,15 +172,10 @@ namespace Service
             }
         }
 
-        public async Task<ApiResponse> GetListForOwner(UserResponse requestor)
+        public async Task<ApiResponse> GetListForOwner()
         {
             try
             {
-                if (requestor is null)
-                {
-                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.REQUESTOR_DOES_NOT_EXISTS, null);
-                }
-
                 var category = await categoryRepository.GetListForUser();
 
                 return new ApiResponse(category, StatusCodes.Status200OK, Keys.CATEGORY, null);

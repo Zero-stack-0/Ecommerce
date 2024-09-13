@@ -1,0 +1,160 @@
+@Html.Partial("_PopAlert");
+<div class="mb-4 flex justify-between">
+    <input id="searchingFilter" oninput="loadProducts()" type="text" placeholder="Search products..."
+        class="border rounded p-2" />
+
+    <div class="ml-auto">
+        <label class="block text-sm font-medium text-gray-700">Category</label>
+        <select id="CategoryId"
+            class="mt-1 block p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+            onchange="loadProducts()">
+        </select>
+    </div>
+</div>
+<div id="explore_div" class="grid grid-cols-2 md:grid-cols-4 gap-4 items-stretch">
+
+</div>
+
+<nav aria-label="Page navigation example" id="pagination">
+
+</nav>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        loadProducts();
+        loadCategory()
+    });
+
+    function loadCategory() {
+        var category_div = document.getElementById("CategoryId");
+        category_div.innerHTML = "";
+        var option_first = document.createElement("option");
+        option_first.textContent = "All";
+        category_div.appendChild(option_first);
+        fetch(`/Category/GetCategoryForUser`)
+            .then(response => response.json())
+            .then(json => {
+                if (json.value.result.length > 0) {
+                    json.value.result.forEach(category => {
+                        var option = document.createElement("option");
+                        option.value = category.id;
+                        option.text = category.name;
+                        category_div.appendChild(option);
+                    })
+                }
+            })
+    }
+
+    const explore_div = document.getElementById("explore_div");
+
+    explore_div.innerHTML = "";
+    function loadProducts() {
+        var searchTerm = document.getElementById("searchingFilter") ? document.getElementById("searchingFilter").value : "";
+        var categoryId = document.getElementById("CategoryId") ? document.getElementById("CategoryId").value : "";
+
+        fetch(`/Product/GetProductList?searchTerm=${searchTerm}&categoryId=${categoryId}`)
+            .then(response => response.json())
+            .then(json => {
+                explore_div.innerHTML = "";
+                if (json) {
+                    console.log(json);
+                    json.forEach(product => {
+                        const container = document.createElement('div');
+                        container.classList.add('w-full', 'max-w-sm', 'h-full', 'bg-white', 'border', 'border-gray-200', 'rounded-lg', 'shadow', 'dark:bg-gray-800', 'dark:border-gray-700');
+
+                        const imageLink = document.createElement('a');
+                        imageLink.href = '#';
+
+                        const image = document.createElement('img');
+                        image.classList.add('p-8', 'rounded-t-lg', 'h-48', 'w-full', 'object-cover');
+                        image.src = "/" + product.imageUrl;
+                        image.alt = 'product image';
+
+                        imageLink.appendChild(image);
+                        container.appendChild(imageLink);
+
+                        const detailsDiv = document.createElement('div');
+                        detailsDiv.classList.add('px-5', 'pb-5');
+
+                        const nameLink = document.createElement('a');
+                        nameLink.href = '#';
+
+                        const productTitle = document.createElement('h5');
+                        productTitle.classList.add('text-xl', 'font-semibold', 'tracking-tight', 'text-gray-900', 'dark:text-white', 'h-16', 'overflow-hidden');
+                        productTitle.innerText = product.name + "," + product.description;
+
+
+                        nameLink.appendChild(productTitle);
+                        detailsDiv.appendChild(nameLink);
+
+
+                        const ratingDiv = document.createElement('div');
+                        ratingDiv.classList.add('flex', 'items-center', 'mt-2.5', 'mb-5');
+
+
+                        const starsDiv = document.createElement('div');
+                        starsDiv.classList.add('flex', 'items-center', 'space-x-1', 'rtl:space-x-reverse');
+
+
+                        for (let star = 0; star < product.rating; star++) {
+                            const starSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                            starSvg.setAttribute('class', 'w-4 h-4 text-yellow-300');
+                            starSvg.setAttribute('aria-hidden', 'true');
+                            starSvg.setAttribute('fill', 'currentColor');
+                            starSvg.setAttribute('viewBox', '0 0 22 20');
+
+                            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                            path.setAttribute('d', 'M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z');
+
+                            starSvg.appendChild(path);
+                            starsDiv.appendChild(starSvg);
+                        }
+
+                        const ratingSpan = document.createElement('span');
+                        ratingSpan.classList.add('bg-blue-100', 'text-blue-800', 'text-xs', 'font-semibold', 'px-2.5', 'py-0.5', 'rounded', 'dark:bg-blue-200', 'dark:text-blue-800', 'ms-3');
+                        ratingSpan.innerText = product.rating;
+
+                        ratingDiv.appendChild(starsDiv);
+                        ratingDiv.appendChild(ratingSpan);
+
+                        detailsDiv.appendChild(ratingDiv);
+
+                        const priceAndCartDiv = document.createElement('div');
+                        priceAndCartDiv.classList.add('flex', 'items-center', 'justify-between');
+
+                        const priceSpan = document.createElement('span');
+                        priceSpan.classList.add('text-3xl', 'font-bold', 'text-gray-900', 'dark:text-white');
+                        priceSpan.innerText = product.price + "₹";
+
+                        const addToCartButton = document.createElement('a');
+                        addToCartButton.href = '#';
+                        addToCartButton.classList.add('text-white', 'bg-blue-700', 'hover:bg-blue-800', 'focus:ring-4', 'focus:outline-none', 'focus:ring-blue-300', 'font-medium', 'rounded-lg', 'text-sm', 'px-5', 'py-2.5', 'text-center', 'dark:bg-blue-600', 'dark:hover:bg-blue-700', 'dark:focus:ring-blue-800');
+                        addToCartButton.innerText = 'Add to cart';
+
+                        priceAndCartDiv.appendChild(priceSpan);
+                        priceAndCartDiv.appendChild(addToCartButton);
+                        detailsDiv.appendChild(priceAndCartDiv);
+                        container.appendChild(detailsDiv);
+                        explore_div.appendChild(container);
+                    })
+                }
+            })
+    }
+</script>
+
+<style>
+    #toast_default {
+        position: fixed;
+        top: 10%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+    }
+</style>
+
+<script>
+    setTimeout(function () {
+        var toast = document.getElementById("toast_default");
+        toast.innerHTML = "";
+    }, 6000)
+</script>

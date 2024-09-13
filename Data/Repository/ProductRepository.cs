@@ -16,5 +16,43 @@ namespace Data.Repository
         {
             return await context.Product.FirstOrDefaultAsync(it => it.SKU == sku && it.CreatedById == userId && !it.IsDeleted);
         }
+
+        public async Task<ICollection<Product>> GetList(string searchTerm, int categoryId)
+        {
+            IQueryable<Product> query = context.Product
+            .Where(it => !it.IsDeleted)
+            .OrderByDescending(it => it.Id);
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                query = query.Where(it => (it.Name + " " + it.Description).Contains(searchTerm));
+            }
+
+            if (categoryId > 0)
+            {
+                query = query.Where(it => it.CategoryId == categoryId);
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<ICollection<Product>> GetListByCreatedById(string searchTerm, int categoryId, long requestorId)
+        {
+            IQueryable<Product> query = context.Product
+            .Where(it => it.CreatedById == requestorId)
+            .OrderByDescending(it => it.Id);
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                query = query.Where(it => (it.Name + " " + it.Description).Contains(searchTerm));
+            }
+
+            if (categoryId > 0)
+            {
+                query = query.Where(it => it.CategoryId == categoryId);
+            }
+
+            return await query.ToListAsync();
+        }
     }
 }

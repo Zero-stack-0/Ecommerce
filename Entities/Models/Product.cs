@@ -32,7 +32,7 @@ namespace Entities.Models
         public decimal Discount { get; set; }
         public int MaxOrderQuantity { get; set; }
         public long CategoryId { get; set; }
-        public int Rating { get; set; } = 0;
+        public decimal Rating { get; set; } = 0;
         public long CreatedById { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
