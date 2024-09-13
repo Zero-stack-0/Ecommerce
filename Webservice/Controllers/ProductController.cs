@@ -7,7 +7,6 @@ using Webservice.Helper;
 
 namespace Webservice.Controllers
 {
-    [Authorize]
     public class ProductController : Controller
     {
         private readonly IProductService productService;
@@ -47,7 +46,30 @@ namespace Webservice.Controllers
                 }
             }
 
+            if (data.StatusCodes == StatusCodes.Status200OK)
+            {
+                return RedirectToAction("List");
+            }
+
             return View();
+        }
+
+        public IActionResult List()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetProductList(string searchTerm, int categoryId)
+        {
+            var requestor = await cookieUserDetailsHandler.GetUserDetail(User.Identity as ClaimsIdentity);
+            if (requestor is null)
+            {
+                return Json(null);
+            }
+
+            var data = await productService.GetListByCreatedById(searchTerm, categoryId, requestor);
+            return Json(data.Result);
         }
     }
 }

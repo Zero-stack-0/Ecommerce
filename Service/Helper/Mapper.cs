@@ -13,6 +13,7 @@ namespace Service.Helper
             CreateMap<Role, RoleResponse>();
             CreateMap<Users, UserResponse2>();
             CreateMap<SellerRequest, SellerRequestResponse>();
+            CreateMap<Product, ProductResponse>();
         }
     }
 }
