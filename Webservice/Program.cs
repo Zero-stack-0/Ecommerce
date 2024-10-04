@@ -10,6 +10,10 @@ builder.Services.AddControllersWithViews();
 
 //DbConnection
 builder.Services.AddDbContext<EcommerceDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DbContext")));
+
+//second db conection for saving exception in database(cant save exception if there is expection in saving in any API so to save the exception to save the exception)
+
+builder.Services.AddDbContext<LoggingDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DbContext")));
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(options =>
         {
@@ -19,6 +23,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
             options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
             options.SlidingExpiration = true;
         });
+
+//other dependency for services and repository
 DependencyInjection.InjectDependencies(builder.Services);
 
 var app = builder.Build();

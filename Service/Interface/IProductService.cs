@@ -10,5 +10,6 @@ namespace Service.Interface
         Task<ApiResponse> Add(AddRequest dto);
         Task<ICollection<ProductResponse>> GetOpenList(string searchTerm, int categoryId);
         Task<ApiResponse> GetListByCreatedById(string searchTerm, int categoryId, UserResponse requestor);
+        Task<ApiResponse> GetById(long id);
     }
 }

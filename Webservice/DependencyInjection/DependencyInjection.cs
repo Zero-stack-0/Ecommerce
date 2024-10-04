@@ -24,6 +24,7 @@ namespace Webservice.DependencyInjection
             services.AddScoped<ISellerService, SellerService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICommonService, CommonService>();
 
             //Helpers
             services.AddScoped<CookieUserDetailsHandler>();

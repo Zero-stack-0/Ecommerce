@@ -71,5 +71,11 @@ namespace Webservice.Controllers
             var data = await productService.GetListByCreatedById(searchTerm, categoryId, requestor);
             return Json(data.Result);
         }
+
+        public async Task<IActionResult> Detail(string productId)
+        {
+            var product = await productService.GetById(Convert.ToInt64(productId));
+            return View(product.Result);
+        }
     }
 }

@@ -54,5 +54,10 @@ namespace Data.Repository
 
             return await query.ToListAsync();
         }
+
+        public async Task<Product?> GetById(long id)
+        {
+            return await context.Product.FirstOrDefaultAsync(it => it.Id == id && !it.IsDeleted);
+        }
     }
 }

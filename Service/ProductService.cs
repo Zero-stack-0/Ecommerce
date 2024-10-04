@@ -16,11 +16,13 @@ namespace Service
         private readonly IProductRepository productRepository;
         private readonly ISellerStoreInfoRepository sellerStoreInfoRepository;
         private readonly IMapper mapper;
-        public ProductService(IProductRepository productRepository, ISellerStoreInfoRepository sellerStoreInfoRepository, IMapper mapper)
+        private readonly ICommonService commonService;
+        public ProductService(IProductRepository productRepository, ISellerStoreInfoRepository sellerStoreInfoRepository, IMapper mapper, ICommonService commonService)
         {
             this.productRepository = productRepository;
             this.sellerStoreInfoRepository = sellerStoreInfoRepository;
             this.mapper = mapper;
+            this.commonService = commonService;
         }
 
         public async Task<ApiResponse> Add(AddRequest dto)
@@ -64,6 +66,7 @@ namespace Service
             }
             catch (Exception ex)
             {
+                await commonService.RegisterException(ex);
                 return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
             }
         }
@@ -100,7 +103,12 @@ namespace Service
         public async Task<ICollection<ProductResponse>> GetOpenList(string searchTerm, int categoryId)
         {
             var products = await productRepository.GetList(searchTerm, categoryId);
-            return products.Select(it => mapper.Map<ProductResponse>(it)).ToList();
+            return products.Select(mapper.Map<ProductResponse>).ToList();
+        }
+
+        public async Task<ApiResponse> GetById(long id)
+        {
+            return new ApiResponse(mapper.Map<ProductResponse>(await productRepository.GetById(id)), StatusCodes.Status200OK, Keys.PRODUCT, null);
         }
     }
 }
