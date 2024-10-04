@@ -14,6 +14,7 @@ namespace Entities
             public const string DOES_NOT_EXISTS = "{0} does not exists";
             public const string SELLER_REQUEST = "Seller Request";
             public const string CATEGORY = "Category";
+            public const string PRODUCT = "Product";
         }
         public static class Account
         {
