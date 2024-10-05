@@ -55,12 +55,14 @@ namespace Entities
             public const string ADDED_SUCESSFULLY = "Category added successfully";
             public const string DELETED_SUCESSFULLY = "Category deleted successfully";
             public const string UPDATED_SUCESSFULLY = "Category updated successfully";
+            public const string DOES_NOT_EXISTS = "Please enter valid category";
         }
 
         public static class PRODUCT
         {
             public const string PRODUCT_ALREADY_EXISTS_WITH_SKU = "Product with same sku number already exists";
             public const string PRODUCT_ADDED_SUCESSFULLY = "Product added succesfully";
+            public const string QUANTITY_SHOULD_BE_GREATER_THAN_MAX_ORDER_QUANTITY = "Quantity should be greater than MaxOrderQuantity";
         }
 
         public static class VIEW_DATA

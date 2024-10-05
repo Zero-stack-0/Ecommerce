@@ -1,4 +1,3 @@
-using Azure.Core;
 using Data.Repository.Interface;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;

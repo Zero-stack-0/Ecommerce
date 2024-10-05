@@ -17,12 +17,14 @@ namespace Service
         private readonly ISellerStoreInfoRepository sellerStoreInfoRepository;
         private readonly IMapper mapper;
         private readonly ICommonService commonService;
-        public ProductService(IProductRepository productRepository, ISellerStoreInfoRepository sellerStoreInfoRepository, IMapper mapper, ICommonService commonService)
+        private readonly ICategoryRepository categoryRepository;
+        public ProductService(IProductRepository productRepository, ISellerStoreInfoRepository sellerStoreInfoRepository, IMapper mapper, ICommonService commonService, ICategoryRepository categoryRepository)
         {
             this.productRepository = productRepository;
             this.sellerStoreInfoRepository = sellerStoreInfoRepository;
             this.mapper = mapper;
             this.commonService = commonService;
+            this.categoryRepository = categoryRepository;
         }
 
         public async Task<ApiResponse> Add(AddRequest dto)
@@ -54,6 +56,17 @@ namespace Service
                 if (doesProductAlreadyExists is not null)
                 {
                     return new ApiResponse(null, StatusCodes.Status400BadRequest, PRODUCT.PRODUCT_ALREADY_EXISTS_WITH_SKU, null);
+                }
+
+                if (dto.MaxOrderQuantity > dto.Quantity)
+                {
+                    return new ApiResponse(null, StatusCodes.Status400BadRequest, PRODUCT.QUANTITY_SHOULD_BE_GREATER_THAN_MAX_ORDER_QUANTITY, null);
+                }
+
+                var category = await categoryRepository.GetById(dto.CategoryId);
+                if (category is null)
+                {
+                    return new ApiResponse(null, StatusCodes.Status400BadRequest, CATEGORY.DOES_NOT_EXISTS, null);
                 }
 
                 var product = new Product(dto.Name, dto.Description, dto.SKU, dto.Quantity, dto.Price, dto.Discount, dto.MaxOrderQuantity, dto.CategoryId, dto.Requestor.Id, sellerStoreInfo.Id, dto.ImageUrl);
