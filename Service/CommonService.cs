@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Data;
 using Entities.Models;
 using Service.Interface;
@@ -12,9 +13,16 @@ public class CommonService : ICommonService
         this.context = context;
     }
 
-    public async Task RegisterException(Exception ex)
+    public async Task RegisterException(Exception ex, [CallerMemberName] string methodName = "",
+    [CallerFilePath] string fileName = "",
+    [CallerLineNumber] int lineNumber = 0)
     {
         var exception = new LoggingException(ex.Message);
+
+        exception.MethodName = methodName;
+        exception.FileName = fileName;
+        exception.LineNumber = lineNumber;
+
         context.LoggingException.Add(exception);
         await context.SaveChangesAsync();
     }

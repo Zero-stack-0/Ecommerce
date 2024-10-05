@@ -18,12 +18,14 @@ namespace Service
         private readonly IMapper mapper;
         private readonly SendInBlueEmailNotificationService sendInBlueEmailNotificationService;
         private readonly ISellerStoreInfoRepository sellerStoreInfoRepository;
-        public SellerService(ISellerRequestRepository sellerRequestRepository, IMapper mapper, SendInBlueEmailNotificationService sendInBlueEmailNotificationService, ISellerStoreInfoRepository sellerStoreInfoRepository)
+        private readonly ICommonService commonService;
+        public SellerService(ISellerRequestRepository sellerRequestRepository, IMapper mapper, SendInBlueEmailNotificationService sendInBlueEmailNotificationService, ISellerStoreInfoRepository sellerStoreInfoRepository, ICommonService commonService)
         {
             this.sellerRequestRepository = sellerRequestRepository;
             this.mapper = mapper;
             this.sendInBlueEmailNotificationService = sendInBlueEmailNotificationService;
             this.sellerStoreInfoRepository = sellerStoreInfoRepository;
+            this.commonService = commonService;
         }
 
         public async Task<ApiResponse> Request(SellerRequestDto dto)
@@ -56,6 +58,7 @@ namespace Service
             }
             catch (Exception ex)
             {
+                await commonService.RegisterException(ex);
                 return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
             }
         }
@@ -85,6 +88,7 @@ namespace Service
 
             catch (Exception ex)
             {
+                await commonService.RegisterException(ex);
                 return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
             }
 
@@ -133,6 +137,7 @@ namespace Service
 
             catch (Exception ex)
             {
+                await commonService.RegisterException(ex);
                 return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
             }
         }
@@ -162,6 +167,7 @@ namespace Service
             }
             catch (Exception ex)
             {
+                await commonService.RegisterException(ex);
                 return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
             }
         }

@@ -18,12 +18,14 @@ namespace Service
         private readonly IMapper mapper;
         private readonly SendInBlueEmailNotificationService sendInBlueEmailNotificationService;
         private readonly IUserPasswordResetRequestRepository userPasswordResetRequestRepository;
-        public AccountService(IUserRepository userRepository, IMapper mapper, SendInBlueEmailNotificationService sendInBlueEmailNotificationService, IUserPasswordResetRequestRepository userPasswordResetRequestRepository)
+        private readonly ICommonService commonService;
+        public AccountService(IUserRepository userRepository, IMapper mapper, SendInBlueEmailNotificationService sendInBlueEmailNotificationService, IUserPasswordResetRequestRepository userPasswordResetRequestRepository, ICommonService commonService)
         {
             this.userRepository = userRepository;
             this.mapper = mapper;
             this.sendInBlueEmailNotificationService = sendInBlueEmailNotificationService;
             this.userPasswordResetRequestRepository = userPasswordResetRequestRepository;
+            this.commonService = commonService;
         }
 
         public async Task<ApiResponse> Create(SignUpRequest dto)
@@ -59,6 +61,7 @@ namespace Service
             }
             catch (Exception ex)
             {
+                await commonService.RegisterException(ex);
                 return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
             }
         }
@@ -102,6 +105,7 @@ namespace Service
             }
             catch (Exception ex)
             {
+                await commonService.RegisterException(ex);
                 return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
             }
         }
@@ -154,6 +158,7 @@ namespace Service
             }
             catch (Exception ex)
             {
+                await commonService.RegisterException(ex);
                 return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
             }
         }
@@ -254,6 +259,7 @@ namespace Service
             }
             catch (Exception ex)
             {
+                await commonService.RegisterException(ex);
                 return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
             }
         }
@@ -297,6 +303,7 @@ namespace Service
             }
             catch (Exception ex)
             {
+                await commonService.RegisterException(ex);
                 return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
             }
         }
@@ -344,6 +351,7 @@ namespace Service
             }
             catch (Exception ex)
             {
+                await commonService.RegisterException(ex);
                 return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
             }
         }

@@ -96,19 +96,37 @@ namespace Service
             }
             catch (Exception ex)
             {
+                await commonService.RegisterException(ex);
                 return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
             }
         }
 
         public async Task<ICollection<ProductResponse>> GetOpenList(string searchTerm, int categoryId)
         {
-            var products = await productRepository.GetList(searchTerm, categoryId);
-            return products.Select(mapper.Map<ProductResponse>).ToList();
+            try
+            {
+                var products = await productRepository.GetList(searchTerm, categoryId);
+                return products.Select(mapper.Map<ProductResponse>).ToList();
+            }
+
+            catch (Exception ex)
+            {
+                await commonService.RegisterException(ex);
+                return new List<ProductResponse>();
+            }
         }
 
         public async Task<ApiResponse> GetById(long id)
         {
-            return new ApiResponse(mapper.Map<ProductResponse>(await productRepository.GetById(id)), StatusCodes.Status200OK, Keys.PRODUCT, null);
+            try
+            {
+                return new ApiResponse(mapper.Map<ProductResponse>(await productRepository.GetById(id)), StatusCodes.Status200OK, Keys.PRODUCT, null);
+            }
+            catch (Exception ex)
+            {
+                await commonService.RegisterException(ex);
+                return new ApiResponse(new ProductResponse(), StatusCodes.Status500InternalServerError, ex.Message, null);
+            }
         }
     }
 }

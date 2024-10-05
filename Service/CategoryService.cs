@@ -2,7 +2,6 @@ using Data.Repository.Interface;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Service.Dto;
-using Service.Dto.Request.Admin;
 using Service.Dto.Request.Admin.Category;
 using Service.Helper;
 using Service.Interface;
@@ -13,9 +12,11 @@ namespace Service
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository categoryRepository;
-        public CategoryService(ICategoryRepository categoryRepository)
+        private readonly ICommonService commonService;
+        public CategoryService(ICategoryRepository categoryRepository, ICommonService commonService)
         {
             this.categoryRepository = categoryRepository;
+            this.commonService = commonService;
         }
 
         public async Task<ApiResponse> Add(AddCategoryRequest dto)
@@ -48,6 +49,7 @@ namespace Service
             }
             catch (Exception ex)
             {
+                await commonService.RegisterException(ex);
                 return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
             }
         }
@@ -77,6 +79,7 @@ namespace Service
             }
             catch (Exception ex)
             {
+                await commonService.RegisterException(ex);
                 return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
             }
         }
@@ -111,6 +114,7 @@ namespace Service
             }
             catch (Exception ex)
             {
+                await commonService.RegisterException(ex);
                 return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
             }
         }
@@ -145,6 +149,7 @@ namespace Service
             }
             catch (Exception ex)
             {
+                await commonService.RegisterException(ex);
                 return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
             }
         }
@@ -168,6 +173,7 @@ namespace Service
             }
             catch (Exception ex)
             {
+                await commonService.RegisterException(ex);
                 return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
             }
         }
@@ -182,6 +188,7 @@ namespace Service
             }
             catch (Exception ex)
             {
+                await commonService.RegisterException(ex);
                 return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
             }
         }
