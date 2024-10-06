@@ -57,7 +57,9 @@ namespace Data.Repository
 
         public async Task<Product?> GetById(long id)
         {
-            return await context.Product.FirstOrDefaultAsync(it => it.Id == id && !it.IsDeleted);
+            return await context.Product
+            .Include(it => it.Category)
+            .FirstOrDefaultAsync(it => it.Id == id && !it.IsDeleted);
         }
     }
 }

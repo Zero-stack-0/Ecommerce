@@ -17,7 +17,7 @@ public class CommonService : ICommonService
     [CallerFilePath] string fileName = "",
     [CallerLineNumber] int lineNumber = 0)
     {
-        var exception = new LoggingException(ex.Message, methodName, fileName, lineNumber, ex.InnerException.ToString());
+        var exception = new LoggingException(ex.Message, methodName, fileName, lineNumber, ex.InnerException is null ? "" : ex.InnerException.ToString());
         context.LoggingException.Add(exception);
         await context.SaveChangesAsync();
     }

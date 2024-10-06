@@ -14,6 +14,7 @@ namespace Service.Helper
             CreateMap<Users, UserResponse2>();
             CreateMap<SellerRequest, SellerRequestResponse>();
             CreateMap<Product, ProductResponse>();
+            CreateMap<Cart, CartResponse>();
         }
     }
 }
