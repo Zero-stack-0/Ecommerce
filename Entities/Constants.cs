@@ -15,6 +15,7 @@ namespace Entities
             public const string SELLER_REQUEST = "Seller Request";
             public const string CATEGORY = "Category";
             public const string PRODUCT = "Product";
+            public const string CART = "Cart";
         }
         public static class Account
         {
@@ -63,6 +64,15 @@ namespace Entities
             public const string PRODUCT_ALREADY_EXISTS_WITH_SKU = "Product with same sku number already exists";
             public const string PRODUCT_ADDED_SUCESSFULLY = "Product added succesfully";
             public const string QUANTITY_SHOULD_BE_GREATER_THAN_MAX_ORDER_QUANTITY = "Quantity should be greater than MaxOrderQuantity";
+            public const string PRODUCT_DOES_NOT_EXISTS = "Product does not exits";
+        }
+
+        public static class CART
+        {
+            public const string ADDED_SUCESSFULLY = "Product added in cart sucessfully";
+            public const string UPDATED_SUCESSFULLY = "Cart updated sucessfully";
+            public const string ITEM_QUANTITY_SHOULD_NOT_BE_GREATER_THAN_MAX_ORDER_QUANTITY = "Cart item quantity should not be greater than max order quantity";
+            public const string ITEM_QUANTITY_SHOULD_NOT_BE_GREATER_THAN_PRODUCT_QUANTITY = "Cart item quantity should not be greater than product quantity";
         }
 
         public static class VIEW_DATA

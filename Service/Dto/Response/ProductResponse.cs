@@ -1,3 +1,5 @@
+using Entities.Models;
+
 namespace Service.Dto.Response
 {
     public class ProductResponse
@@ -13,5 +15,6 @@ namespace Service.Dto.Response
         public long CategoryId { get; set; }
         public decimal Rating { get; set; } = 0;
         public string ImageUrl { get; set; }
+        public Category Category { get; set; }
     }
 }

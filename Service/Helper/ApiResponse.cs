@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Http;
+using static Entities.Constants;
+
 namespace Service.Helper
 {
     public class ApiResponse
@@ -28,5 +31,21 @@ namespace Service.Helper
         public int PageSize { get; set; }
         public int TotalCount { get; set; }
         public int TotalPages { get; set; }
+    }
+
+    public static class ResponseMessage
+    {
+        public static ApiResponse RequestorDoesNotExists()
+        {
+            return new ApiResponse(null, StatusCodes.Status200OK, Keys.REQUESTOR_DOES_NOT_EXISTS, null);
+        }
+        public static ApiResponse Sucess(object? data, string message, PagedData? pagedData)
+        {
+            return new ApiResponse(data, StatusCodes.Status200OK, message, pagedData);
+        }
+        public static ApiResponse BadRequest(string message)
+        {
+            return new ApiResponse(null, StatusCodes.Status400BadRequest, message, null);
+        }
     }
 }

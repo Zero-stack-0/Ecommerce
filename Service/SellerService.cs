@@ -1,7 +1,9 @@
 using AutoMapper;
+using Azure;
 using Data.Repository.Interface;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Service.Dto;
 using Service.Dto.Request;
 using Service.Dto.Request.Admin;
@@ -34,18 +36,18 @@ namespace Service
             {
                 if (dto.Requestor is null)
                 {
-                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.REQUESTOR_DOES_NOT_EXISTS, null);
+                    return ResponseMessage.RequestorDoesNotExists();
                 }
 
                 if (!dto.Requestor.IsEmailVerified)
                 {
-                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Account.VERIFY_EMAIL_ID, null);
+                    return ResponseMessage.BadRequest(Account.VERIFY_EMAIL_ID);
                 }
 
                 var doessellerRequestExists = await sellerRequestRepository.GetByUserId(dto.Requestor.Id);
                 if (doessellerRequestExists is not null)
                 {
-                    return new ApiResponse(mapper.Map<SellerRequestResponse>(doessellerRequestExists), StatusCodes.Status400BadRequest, SELLER.REQUEST_ALREADY_EXISTS, null);
+                    return ResponseMessage.BadRequest(SELLER.REQUEST_ALREADY_EXISTS);
                 }
 
                 var sellerRequest = new SellerRequest(dto.Requestor.Id, dto.StoreName, dto.StoreAddress, dto.StoreContactNumber, dto.PaymentMethod);
@@ -54,7 +56,7 @@ namespace Service
 
                 await sellerRequestRepository.SaveAsync();
 
-                return new ApiResponse(mapper.Map<SellerRequestResponse>(sellerRequest), StatusCodes.Status200OK, SELLER.REQEUST_SUBMITTED, null);
+                return ResponseMessage.Sucess(mapper.Map<SellerRequestResponse>(sellerRequest), SELLER.REQEUST_SUBMITTED, null);
             }
             catch (Exception ex)
             {
@@ -69,21 +71,21 @@ namespace Service
             {
                 if (requestor is null)
                 {
-                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.REQUESTOR_DOES_NOT_EXISTS, null);
+                    return ResponseMessage.RequestorDoesNotExists();
                 }
 
                 if (!requestor.IsEmailVerified)
                 {
-                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Account.VERIFY_EMAIL_ID, null);
+                    return ResponseMessage.BadRequest(Account.VERIFY_EMAIL_ID);
                 }
 
                 var doessellerRequestExists = await sellerRequestRepository.GetByUserId(requestor.Id);
                 if (doessellerRequestExists is null)
                 {
-                    return new ApiResponse(null, StatusCodes.Status400BadRequest, string.Format(Keys.DOES_NOT_EXISTS, SELLER.SELLET_REQUEST), null);
+                    return ResponseMessage.BadRequest(string.Format(Keys.DOES_NOT_EXISTS, SELLER.SELLET_REQUEST));
                 }
 
-                return new ApiResponse(mapper.Map<SellerRequestResponse>(doessellerRequestExists), StatusCodes.Status200OK, SELLER.SELLET_REQUEST, null);
+                return ResponseMessage.Sucess(mapper.Map<SellerRequestResponse>(doessellerRequestExists), SELLER.SELLET_REQUEST, null);
             }
 
             catch (Exception ex)
@@ -100,23 +102,23 @@ namespace Service
             {
                 if (dto.Requestor is null)
                 {
-                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.REQUESTOR_DOES_NOT_EXISTS, null);
+                    return ResponseMessage.RequestorDoesNotExists();
                 }
 
                 if (dto.Requestor.Role.Name != Keys.ADMIN)
                 {
-                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.FORBIDDEN, null);
+                    return ResponseMessage.BadRequest(Keys.FORBIDDEN);
                 }
 
                 var sellerRequest = await sellerRequestRepository.GetById(dto.SellerRequestId);
                 if (sellerRequest is null)
                 {
-                    return new ApiResponse(null, StatusCodes.Status400BadRequest, string.Format(Keys.DOES_NOT_EXISTS, SELLER.SELLET_REQUEST), null);
+                    return ResponseMessage.BadRequest(string.Format(Keys.DOES_NOT_EXISTS, SELLER.SELLET_REQUEST));
                 }
 
                 if (sellerRequest.Status != SellerReqeustStatus.Pending)
                 {
-                    return new ApiResponse(null, StatusCodes.Status400BadRequest, SELLER.ONLY_STATUS_OF_PENDING_REQUEST_CAN_CHANGE, null);
+                    return ResponseMessage.BadRequest(SELLER.ONLY_STATUS_OF_PENDING_REQUEST_CAN_CHANGE);
                 }
 
                 sellerRequest.UpdateStatus(dto.Status);
@@ -132,7 +134,7 @@ namespace Service
 
                 SendUpdatedStatusEmail(sellerRequest.User, dto.Status.ToString());
 
-                return new ApiResponse(sellerRequest, StatusCodes.Status200OK, SELLER.SELLET_REQUEST_UPDATED_SUCESSFULLY, null);
+                return ResponseMessage.Sucess(sellerRequest, SELLER.SELLET_REQUEST_UPDATED_SUCESSFULLY, null);
             }
 
             catch (Exception ex)
@@ -148,22 +150,22 @@ namespace Service
             {
                 if (dto.Requestor is null)
                 {
-                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.REQUESTOR_DOES_NOT_EXISTS, null);
+                    return ResponseMessage.RequestorDoesNotExists();
                 }
 
                 if (dto.Requestor.Role.Name != Keys.ADMIN)
                 {
-                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.FORBIDDEN, null);
+                    return ResponseMessage.BadRequest(Keys.FORBIDDEN);
                 }
 
                 if (dto.PageNo <= 0 || dto.PageSize <= 0)
                 {
-                    return new ApiResponse(null, StatusCodes.Status400BadRequest, Keys.INVALID_PAGINATION, null);
+                    return ResponseMessage.BadRequest(Keys.INVALID_PAGINATION);
                 }
 
                 var (sellerRequests, totalCount) = await sellerRequestRepository.GetRequests(dto.PageNo, dto.PageSize, dto.SearchTerm, dto.Status);
 
-                return new ApiResponse(sellerRequests.Select(mapper.Map<SellerRequestResponse>).ToList(), StatusCodes.Status200OK, Keys.SELLER_REQUEST, new PagedData(dto.PageNo, dto.PageSize, totalCount, (int)Math.Ceiling((double)totalCount / dto.PageSize)));
+                return ResponseMessage.Sucess(sellerRequests.Select(mapper.Map<SellerRequestResponse>).ToList(), Keys.SELLER_REQUEST, new PagedData(dto.PageNo, dto.PageSize, totalCount, (int)Math.Ceiling((double)totalCount / dto.PageSize)));
             }
             catch (Exception ex)
             {
