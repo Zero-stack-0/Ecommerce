@@ -8,7 +8,7 @@ namespace Service.Interface
     public interface IProductService
     {
         Task<ApiResponse> Add(AddRequest dto);
-        Task<ICollection<ProductResponse>> GetOpenList(string searchTerm, int categoryId);
+        Task<ICollection<ProductResponse>> GetOpenList(string searchTerm, int categoryId, long? requestorId);
         Task<ApiResponse> GetListByCreatedById(string searchTerm, int categoryId, UserResponse requestor);
         Task<ApiResponse> GetById(long id);
     }

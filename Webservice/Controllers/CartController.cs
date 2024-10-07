@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Service.Dto.Request.Cart;
-using Service.Helper;
 using Service.Interface;
 using Webservice.Helper;
 
@@ -44,17 +43,40 @@ namespace Webservice.Controllers
             TempData["apiResponseMessage"] = data.Message;
             TempData["apiResponseStatusCode"] = data.StatusCodes.ToString();
 
-            return RedirectToAction("Index", "Home");
+            return View("List");
+        }
+
+        public IActionResult List()
+        {
+            return View();
         }
 
         [HttpGet]
-        public async Task<ApiResponse> GetList(GetListRequest dto)
+        public async Task<JsonResult> GetList(GetListRequest dto)
         {
             dto.Requestor = await cookieUserDetailsHandler.GetUserDetail(User.Identity as ClaimsIdentity);
 
             var data = await cartService.GetList(dto);
 
-            return data;
+            return Json(data);
+        }
+
+        public async Task<IActionResult> Detail(long cartId)
+        {
+            var requestor = await cookieUserDetailsHandler.GetUserDetail(User.Identity as ClaimsIdentity);
+            var data = await cartService.GetDetail(cartId, requestor);
+            return View(data.Result);
+        }
+
+        public async Task<IActionResult> Update(UpdateRequest dto)
+        {
+            dto.Requestor = await cookieUserDetailsHandler.GetUserDetail(User.Identity as ClaimsIdentity);
+            var data = await cartService.Update(dto);
+
+            TempData["apiResponseMessage"] = data.Message;
+            TempData["apiResponseStatusCode"] = data.StatusCodes.ToString();
+
+            return View("List");
         }
     }
 }

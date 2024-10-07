@@ -114,11 +114,11 @@ namespace Service
             }
         }
 
-        public async Task<ICollection<ProductResponse>> GetOpenList(string searchTerm, int categoryId)
+        public async Task<ICollection<ProductResponse>> GetOpenList(string searchTerm, int categoryId, long? requestorId)
         {
             try
             {
-                var products = await productRepository.GetList(searchTerm, categoryId);
+                var products = await productRepository.GetList(searchTerm, categoryId, requestorId);
                 return products.Select(mapper.Map<ProductResponse>).ToList();
             }
 
