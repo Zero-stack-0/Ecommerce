@@ -33,4 +33,9 @@ public class Cart
         Quantity = quantity;
         UpdatedAt = DateTime.UtcNow;
     }
+
+    public void Delete()
+    {
+        IsDeleted = true;
+    }
 }

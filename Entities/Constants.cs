@@ -76,6 +76,7 @@ namespace Entities
             public const string ITEM_QUANTITY_SHOULD_NOT_BE_GREATER_THAN_MAX_ORDER_QUANTITY = "Cart item quantity should not be greater than max order quantity";
             public const string ITEM_QUANTITY_SHOULD_NOT_BE_GREATER_THAN_PRODUCT_QUANTITY = "Cart item quantity should not be greater than product quantity";
             public const string CART_ITEM = "Cart item";
+            public const string DELETED_SUCESSFULLY = "Cart Deleted sucessfully";
         }
 
         public static class VIEW_DATA
