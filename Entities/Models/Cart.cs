@@ -27,4 +27,10 @@ public class Cart
     public DateTime CreatedAt { get; set; }
     public bool IsDeleted { get; set; }
     public DateTime? UpdatedAt { get; set; }
+
+    public void Update(int quantity)
+    {
+        Quantity = quantity;
+        UpdatedAt = DateTime.UtcNow;
+    }
 }

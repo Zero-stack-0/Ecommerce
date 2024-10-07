@@ -1,0 +1,314 @@
+@Html.Partial("_PopAlert")
+<div id="toast_default2">
+
+</div>
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <div
+        class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
+
+    </div>
+    <label for="table-search" class="sr-only">Search</label>
+    <div class="relative">
+        <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+            </svg>
+        </div>
+        <input type="text" id="table-search-users"
+            class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Search for product" oninput="loadCartsAfterSearch(1)">
+    </div>
+</div>
+<table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+            <th scope="col" class="px-6 py-3">
+                Name
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Quantity
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Description
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Total Price
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Available Quantity
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody id="tbody">
+
+    </tbody>
+
+</table>
+</div>
+<nav aria-label="Page navigation example" id="pagination">
+
+</nav>
+<script>
+    function loadCartsAfterSearch(pageNo) {
+        document.getElementById('toast_default2').innerHTML = ''
+        var tbody_row = document.getElementById("tbody");
+        var searchText = document.getElementById("table-search-users") ? document.getElementById("table-search-users").value : '';
+        tbody_row.innerHTML = '';
+        fetch(`/Cart/GetList?pageNo=${pageNo}&pageSize=5&searchTerm=${searchText}`)
+            .then(response => response.json())
+            .then(json => {
+                if (json.result.length > 0) {
+                    tbody_row.innerHTML = '';
+
+                    json.result.forEach(cart => {
+
+                        var tr_for_cart_row = document.createElement("tr");
+                        tr_for_cart_row.className = "bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600";
+
+                        tbody_row.appendChild(tr_for_cart_row);
+
+                        var th_cart_row = document.createElement("th");
+                        th_cart_row.scope = "row";
+                        th_cart_row.className = "flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white";
+
+                        tr_for_cart_row.appendChild(th_cart_row);
+
+                        var img_for_cart_row = document.createElement("img");
+                        img_for_cart_row.className = "w-10 h-10 rounded-full";
+                        img_for_cart_row.src = "/" + cart.product.imageUrl;
+                        img_for_cart_row.alt = "Product Image";
+
+                        th_cart_row.appendChild(img_for_cart_row);
+
+                        var div_for_cart_row = document.createElement("div");
+                        div_for_cart_row.className = "ps-3";
+
+                        th_cart_row.appendChild(div_for_cart_row);
+
+                        var cart_name_div = document.createElement("div");
+                        cart_name_div.className = "text-base font-semibold";
+                        cart_name_div.textContent = cart.product.name;
+
+                        div_for_cart_row.appendChild(cart_name_div);
+
+                        var td_for_quantity = document.createElement("td");
+                        td_for_quantity.className = "px-6 py-4";
+                        td_for_quantity.textContent = cart.quantity;
+                        tr_for_cart_row.appendChild(td_for_quantity);
+
+                        var td_for_product_description = document.createElement("td");
+                        td_for_product_description.className = "px-6 py-4";
+
+                        var div_for_cart_name = document.createElement('div');
+                        div_for_cart_name.className = "flex items-center";
+                        div_for_cart_name.textContent = cart.product.description;
+                        td_for_product_description.appendChild(div_for_cart_name);
+
+                        tr_for_cart_row.appendChild(td_for_product_description);
+
+                        var td_for_price = document.createElement("td");
+                        td_for_price.className = "px-6 py-4";
+
+
+
+                        td_for_price.textContent = cart.finalPriceAfterDiscount + "₹";
+
+
+                        tr_for_cart_row.appendChild(td_for_price);
+
+                        var td_for_availabilty = document.createElement("td");
+                        td_for_availabilty.className = "px-6 py-4";
+
+                        td_for_availabilty.textContent = cart.product.quantity;
+                        tr_for_cart_row.appendChild(td_for_availabilty);
+
+                        var td_for_product_availablitiy = document.createElement("td");
+                        td_for_product_availablitiy.className = "px-6 py-4";
+
+
+                        if (cart.product.quantity > 1) {
+                            var actionContainer = document.createElement("div");
+
+                            var a_for_accepted_req = document.createElement("a");
+                            a_for_accepted_req.textContent = "Order";
+                            a_for_accepted_req.style.color = "green";
+                            a_for_accepted_req.href = `/Order/Add?CartId=${cart.id}`;
+
+                            var separator = document.createTextNode("/");
+                            var separator_2 = document.createTextNode("/");
+
+                            var a_for_view_cart_product = document.createElement("a");
+                            a_for_view_cart_product.textContent = "View Detail";
+                            a_for_view_cart_product.style.color = "blue";
+                            a_for_view_cart_product.href = `/Cart/Detail?CartId=${cart.id}`;
+
+                            var a_for_delete_cart_product = document.createElement("a");
+                            a_for_delete_cart_product.textContent = "Delete";
+                            a_for_delete_cart_product.style.color = "red";
+                            a_for_delete_cart_product.href = `/Cart/Delete?CartId=${cart.id}`;
+
+
+                            td_for_product_availablitiy.appendChild(actionContainer);
+                            actionContainer.appendChild(a_for_accepted_req);
+                            actionContainer.appendChild(separator);
+                            actionContainer.appendChild(a_for_view_cart_product);
+                            actionContainer.appendChild(separator_2);
+                            actionContainer.appendChild(a_for_delete_cart_product);
+                        }
+                        else {
+                            var p = document.createElement("p");
+                            p.innerText = "Not Avaiable";
+                            td_for_product_availablitiy.appendChild(p);
+                        }
+
+                        tr_for_cart_row.appendChild(td_for_product_availablitiy);
+
+                    });
+                } else {
+                    document.getElementById('toast_default2').innerHTML = '';
+                    const toastDanger = document.createElement('div');
+                    toastDanger.id = 'toast-danger';
+                    toastDanger.className = 'flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800';
+                    toastDanger.role = 'alert';
+
+                    const iconContainer = document.createElement('div');
+                    iconContainer.className = 'inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200';
+
+                    const svgIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                    svgIcon.className = 'w-5 h-5';
+                    svgIcon.setAttribute('aria-hidden', 'true');
+                    svgIcon.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                    svgIcon.setAttribute('fill', 'currentColor');
+                    svgIcon.setAttribute('viewBox', '0 0 20 20');
+
+                    const pathIcon = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    pathIcon.setAttribute('d', 'M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z');
+
+                    svgIcon.appendChild(pathIcon);
+                    iconContainer.appendChild(svgIcon);
+
+                    const srOnlyIcon = document.createElement('span');
+                    srOnlyIcon.className = 'sr-only';
+                    srOnlyIcon.textContent = 'Error icon';
+
+                    iconContainer.appendChild(srOnlyIcon);
+
+                    const messageContainer = document.createElement('div');
+                    messageContainer.className = 'ms-3 text-sm font-normal';
+                    messageContainer.textContent = 'No seller request found';
+
+                    const closeButton = document.createElement('button');
+                    closeButton.type = 'button';
+                    closeButton.className = 'ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700';
+                    closeButton.setAttribute('data-dismiss-target', '#toast-danger');
+                    closeButton.setAttribute('aria-label', 'Close');
+
+                    const srOnlyClose = document.createElement('span');
+                    srOnlyClose.className = 'sr-only';
+                    srOnlyClose.textContent = 'Close';
+
+                    const closeIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                    closeIcon.className = 'w-3 h-3';
+                    closeIcon.setAttribute('aria-hidden', 'true');
+                    closeIcon.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                    closeIcon.setAttribute('fill', 'none');
+                    closeIcon.setAttribute('viewBox', '0 0 14 14');
+
+                    const pathClose = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    pathClose.setAttribute('stroke', 'currentColor');
+                    pathClose.setAttribute('stroke-linecap', 'round');
+                    pathClose.setAttribute('stroke-linejoin', 'round');
+                    pathClose.setAttribute('stroke-width', '2');
+                    pathClose.setAttribute('d', 'm1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6');
+
+                    closeIcon.appendChild(pathClose);
+                    closeButton.appendChild(srOnlyClose);
+                    closeButton.appendChild(closeIcon);
+
+                    toastDanger.appendChild(iconContainer);
+                    toastDanger.appendChild(messageContainer);
+                    toastDanger.appendChild(closeButton);
+
+                    document.getElementById('toast_default2').appendChild(toastDanger);
+
+                    setTimeout(function () {
+                        document.getElementById('toast_default2').innerHTML = "";
+                    }, 3000);
+                }
+
+                const pagination = document.getElementById('pagination');
+                pagination.innerHTML = '';
+
+                var ul = document.createElement('ul');
+                ul.className = "inline-flex -space-x-px text-sm";
+
+                var li_previous = document.createElement('li');
+                var a_previous_page = document.createElement('a');
+                a_previous_page.textContent = "Previous";
+                li_previous.appendChild(a_previous_page);
+                li_previous.className = 'flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white';
+
+                var li_next = document.createElement('li');
+                var a_next_page = document.createElement('a');
+                a_next_page.textContent = "Next";
+                li_next.appendChild(a_next_page);
+                li_next.className = 'flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white';
+
+
+                for (let i = 1; i <= json?.pagedData.totalPages; i++) {
+                    var li = document.createElement('li');
+                    var a = document.createElement('a');
+                    a.className = 'flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white';
+                    a.textContent = i;
+
+                    if (i === pageNo) {
+                        a.setAttribute('aria-current', 'page');
+                    }
+                    li.appendChild(a);
+
+                    ul.appendChild(li);
+
+                    a.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        const allLinks = ul.querySelectorAll('a');
+                        allLinks.forEach(link => link.removeAttribute('aria-current'));
+                        a.setAttribute('aria-current', 'page');
+                        loadCartsAfterSearch(i);
+                    });
+                }
+
+
+                pagination.appendChild(ul);
+
+            })
+            .catch(error => console.error('Error fetching users:', error)); // Add error handling
+
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        loadCartsAfterSearch(1);
+    });
+</script>
+
+<style>
+    #pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    #toast_default2 {
+        position: fixed;
+        top: 15%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+    }
+</style>

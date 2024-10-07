@@ -17,10 +17,10 @@ namespace Data.Repository
             return await context.Product.FirstOrDefaultAsync(it => it.SKU == sku && it.CreatedById == userId && !it.IsDeleted);
         }
 
-        public async Task<ICollection<Product>> GetList(string searchTerm, int categoryId)
+        public async Task<ICollection<Product>> GetList(string searchTerm, int categoryId, long? requestorId)
         {
             IQueryable<Product> query = context.Product
-            .Where(it => !it.IsDeleted)
+            .Where(it => !it.IsDeleted && (requestorId == null ? true : it.CreatedById != requestorId))
             .OrderByDescending(it => it.Id);
 
             if (!string.IsNullOrWhiteSpace(searchTerm))

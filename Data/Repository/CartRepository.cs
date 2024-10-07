@@ -16,6 +16,7 @@ namespace Data.Repository
         {
 
             IQueryable<Cart> query = context.Cart
+                .AsNoTracking()
                 .Include(it => it.Product)
                 .Where(it => it.AddedById == addedById && !it.IsDeleted)
                 .OrderByDescending(it => it.Id);
@@ -38,6 +39,14 @@ namespace Data.Repository
         public async Task<Cart?> GetByProdcutIdAndAddedById(long productId, long addedById)
         {
             return await context.Cart.FirstOrDefaultAsync(it => it.ProductId == productId && it.AddedById == addedById && !it.IsDeleted);
+        }
+
+        public async Task<Cart?> GetById(long cartId)
+        {
+            return await context.Cart
+            .Include(it => it.Product)
+                .ThenInclude(it => it.Category)
+            .FirstOrDefaultAsync(it => it.Id == cartId && !it.IsDeleted);
         }
     }
 }

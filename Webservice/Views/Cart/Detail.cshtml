@@ -1,12 +1,12 @@
-@model Service.Dto.Response.ProductResponse;
+@model Service.Dto.Response.CartResponse;
 
 <section class="bg-white dark:bg-gray-900">
     <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
         <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Add item to cart</h2>
-        <form asp-action="Add" asp-controller="Cart" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="ProductId" value="@Model.Id" />
+        <form asp-action="Update" asp-controller="Cart" method="put" enctype="multipart/form-data">
+            <input type="hidden" name="CartId" value="@Model.Id" />
             <img class="px-4 max-w-full h-auto" style="max-height: 300px; object-fit: contain;"
-                src="~/@Model.ImageUrl" />
+                src="~/@Model.Product.ImageUrl" />
 
             <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                 <div class="sm:col-span-2">
@@ -14,43 +14,57 @@
                         Name</label>
                     <input type="text" name="name" id="name"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        value="@Model.Name" disabled>
+                        value="@Model.Product.Name" disabled>
                 </div>
                 <div class="w-full">
                     <label for="brand"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
                     <input type="text" name="brand" id="brand"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        value="@Model.Description" disabled>
+                        value="@Model.Product.Description" disabled>
                 </div>
                 <div class="w-full">
                     <label for="price"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price</label>
                     <input type="number" name="price" id="price"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        value="@Model.Price" disabled>
+                        value="@Model.Product.Price" disabled>
                 </div>
                 <div>
                     <label for="category"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>
                     <input type="text" name="price" id="price"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        value="@Model.Category.Name" disabled>
+                        value="@Model.Product.Category.Name" disabled>
                 </div>
                 <div>
-                    <label for="quantity" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Item
-                        Quantity</label>
+                    <label for="quantity" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        Item Quantity
+                    </label>
                     <input type="number" name="Quantity" id="quantity"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        placeholder="1" min="1" max="@Model.MaxOrderQuantity" required="">
+                        placeholder="1" min="1" max="@Model.Product.MaxOrderQuantity" required
+                        onchange="toggleAddToCartButton()">
                 </div>
             </div>
             <div class="mt-6">
-                <button type="submit"
-                    class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300">
-                    Add to cart
+                <button type="submit" id="addToCartBtn"
+                    class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300"
+                    disabled>
+                    Update cart
                 </button>
             </div>
         </form>
     </div>
 </section>
+
+<script>
+    function toggleAddToCartButton() {
+        const quantityInput = document.getElementById('quantity');
+        const addToCartBtn = document.getElementById('addToCartBtn');
+
+        console.log("changes")
+        addToCartBtn.disabled = false;
+
+    }
+</script>

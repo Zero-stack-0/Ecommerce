@@ -1,3 +1,5 @@
+using System.Data;
+
 namespace Entities
 {
     public static class Constants
@@ -73,6 +75,7 @@ namespace Entities
             public const string UPDATED_SUCESSFULLY = "Cart updated sucessfully";
             public const string ITEM_QUANTITY_SHOULD_NOT_BE_GREATER_THAN_MAX_ORDER_QUANTITY = "Cart item quantity should not be greater than max order quantity";
             public const string ITEM_QUANTITY_SHOULD_NOT_BE_GREATER_THAN_PRODUCT_QUANTITY = "Cart item quantity should not be greater than product quantity";
+            public const string CART_ITEM = "Cart item";
         }
 
         public static class VIEW_DATA
