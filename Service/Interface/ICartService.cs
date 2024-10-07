@@ -10,4 +10,5 @@ public interface ICartService
     Task<ApiResponse> GetList(GetListRequest dto);
     Task<ApiResponse> GetDetail(long cartId, UserResponse? requestor);
     Task<ApiResponse> Update(UpdateRequest dto);
+    Task<ApiResponse> Delete(long cartId, UserResponse? requestor);
 }

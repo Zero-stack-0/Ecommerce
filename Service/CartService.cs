@@ -111,6 +111,7 @@ namespace Service
             }
         }
 
+        //View Review on product on view detail screen pending
         public async Task<ApiResponse> GetDetail(long cartId, UserResponse? requestor)
         {
             try
@@ -173,6 +174,41 @@ namespace Service
 
                 return ResponseMessage.Sucess(cart, CART.UPDATED_SUCESSFULLY, null);
             }
+            catch (Exception ex)
+            {
+                await commonService.RegisterException(ex);
+                return new ApiResponse(null, StatusCodes.Status500InternalServerError, ex.Message, null);
+            }
+        }
+
+        //Pop up pending on Clicking Delete
+        public async Task<ApiResponse> Delete(long cartId, UserResponse? requestor)
+        {
+            try
+            {
+                if (requestor is null)
+                {
+                    return ResponseMessage.RequestorDoesNotExists();
+                }
+
+                var cart = await cartRepository.GetById(cartId);
+                if (cart is null)
+                {
+                    return ResponseMessage.BadRequest(string.Format(Keys.DOES_NOT_EXISTS, CART.CART_ITEM));
+                }
+
+                if (cart.AddedById != requestor.Id)
+                {
+                    return ResponseMessage.BadRequest(Keys.FORBIDDEN);
+                }
+
+                cart.Delete();
+
+                await cartRepository.SaveAsync();
+
+                return ResponseMessage.Sucess(null, CART.DELETED_SUCESSFULLY, null);
+            }
+
             catch (Exception ex)
             {
                 await commonService.RegisterException(ex);

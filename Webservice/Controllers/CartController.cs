@@ -78,5 +78,16 @@ namespace Webservice.Controllers
 
             return View("List");
         }
+
+        public async Task<IActionResult> Delete(long cartId)
+        {
+            var requestor = await cookieUserDetailsHandler.GetUserDetail(User.Identity as ClaimsIdentity);
+            var data = await cartService.Delete(cartId, requestor);
+
+            TempData["apiResponseMessage"] = data.Message;
+            TempData["apiResponseStatusCode"] = data.StatusCodes.ToString();
+
+            return View("List");
+        }
     }
 }
