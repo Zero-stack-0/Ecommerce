@@ -19,6 +19,7 @@ namespace Webservice.DependencyInjection
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ISellerStoreInfoRepository, SellerStoreInfoRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
 
             //services
             services.AddScoped<IAccountService, AccountService>();
@@ -27,6 +28,7 @@ namespace Webservice.DependencyInjection
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICommonService, CommonService>();
             services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IOrderService, OrderService>();
 
             //Helpers
             services.AddScoped<CookieUserDetailsHandler>();
