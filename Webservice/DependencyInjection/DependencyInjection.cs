@@ -29,6 +29,7 @@ namespace Webservice.DependencyInjection
             services.AddScoped<ICommonService, CommonService>();
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<PaymentService>();
 
             //Helpers
             services.AddScoped<CookieUserDetailsHandler>();

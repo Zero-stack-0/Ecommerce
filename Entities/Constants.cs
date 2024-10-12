@@ -18,6 +18,7 @@ namespace Entities
             public const string CATEGORY = "Category";
             public const string PRODUCT = "Product";
             public const string CART = "Cart";
+            public const string PAYMENT_INTENT = "Payment Intent";
         }
         public static class Account
         {
@@ -77,6 +78,11 @@ namespace Entities
             public const string ITEM_QUANTITY_SHOULD_NOT_BE_GREATER_THAN_PRODUCT_QUANTITY = "Cart item quantity should not be greater than product quantity";
             public const string CART_ITEM = "Cart item";
             public const string DELETED_SUCESSFULLY = "Cart Deleted sucessfully";
+        }
+
+        public static class ORDER
+        {
+            public const string OUT_OF_STOCK = "Out of stock";
         }
 
         public static class VIEW_DATA
