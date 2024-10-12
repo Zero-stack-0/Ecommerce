@@ -22,5 +22,6 @@ namespace Data
         public DbSet<Product> Product { get; set; }
         public DbSet<SellerStoreInfo> SellerStoreInfo { get; set; }
         public DbSet<Cart> Cart { get; set; }
+        public DbSet<Order> Order { get; set; }
     }
 }
